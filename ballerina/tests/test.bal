@@ -14,8 +14,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/test;
 import ballerina/io;
+import ballerina/test;
 
 configurable boolean isLiveServer = ?;
 configurable string token = ?;
@@ -26,9 +26,11 @@ ConnectionConfig config = {
         token
     }
 };
+final Client AssistantClient = check new (config, serviceUrl);
 
-public type DataPassingObject record{
-    string assistantId ="";
+
+public type DataPassingObject record {
+    string assistantId = "";
     string threadId = "";
     string messageId = "";
     string runId = "";
@@ -36,8 +38,6 @@ public type DataPassingObject record{
 };
 
 DataPassingObject dataPasser = {};
-
-final Client AssistantClient = check new(config,serviceUrl);
 
 const map<string|string[]> headers = {
     "OpenAI-Beta": ["assistants=v2"]
@@ -47,9 +47,9 @@ function dataGen() returns DataPassingObject[][] {
     return [[dataPasser]];
 }
 
-@test:Config {dataProvider:  dataGen, dependsOn: [testCreateMessage, testCreateThread, testGetMessage]}
-isolated function  testDeleteMessage(DataPassingObject dataPasser) {
-    // Ensure threadId and messageId are not empty
+@test:Config {dataProvider: dataGen, dependsOn: [testCreateMessage, testCreateThread, testGetMessage]}
+isolated function testDeleteMessage(DataPassingObject dataPasser) {
+    
     if (dataPasser.threadId == "" || dataPasser.messageId == "") {
         test:assertFail(msg = "No thread ID or message ID available. Ensure message creation test runs first.");
     }
@@ -64,16 +64,16 @@ isolated function  testDeleteMessage(DataPassingObject dataPasser) {
     }
 }
 
-@test:Config {dataProvider:  dataGen, dependsOn: [testCreateThread, testCreateMessage]}
-isolated function  testGetMessage(DataPassingObject dataPasser) {
-        // Ensure threadId and messageId are not empty
+@test:Config {dataProvider: dataGen, dependsOn: [testCreateThread, testCreateMessage]}
+isolated function testGetMessage(DataPassingObject dataPasser) {
+    // Ensure threadId and messageId are not empty
     if (dataPasser.threadId == "" || dataPasser.messageId == "") {
         test:assertFail(msg = "No thread ID or message ID available. Ensure thread creation and message creation tests run first.");
     }
 
     // Retrieve a specific message in the thread
     MessageObject|error res = AssistantClient->/threads/[dataPasser.threadId]/messages/[dataPasser.messageId].get(headers);
-    
+
     if (res is MessageObject) {
         // io:println("Message Details: ", res);
         test:assertEquals(res.id, dataPasser.messageId, msg = "Retrieved message ID does not match the requested ID");
@@ -82,8 +82,8 @@ isolated function  testGetMessage(DataPassingObject dataPasser) {
     }
 }
 
-@test:Config {dataProvider:  dataGen, dependsOn: [testCreateThread]}
-isolated function  testCreateMessage(DataPassingObject dataPasser) {
+@test:Config {dataProvider: dataGen, dependsOn: [testCreateThread]}
+isolated function testCreateMessage(DataPassingObject dataPasser) {
     // Ensure threadId is not empty
     if (dataPasser.threadId == "") {
         test:assertFail(msg = "No thread ID available. Ensure testCreateThread runs first.");
@@ -104,8 +104,8 @@ isolated function  testCreateMessage(DataPassingObject dataPasser) {
     }
 }
 
-@test:Config {dataProvider:  dataGen, dependsOn: [testCreateThread]}
-isolated function  testListMessages(DataPassingObject dataPasser) {
+@test:Config {dataProvider: dataGen, dependsOn: [testCreateThread]}
+isolated function testListMessages(DataPassingObject dataPasser) {
     // Ensure threadId is not empty
     if (dataPasser.threadId == "") {
         test:assertFail(msg = "No thread ID available. Ensure thread creation test runs first.");
@@ -117,11 +117,10 @@ isolated function  testListMessages(DataPassingObject dataPasser) {
     test:assertTrue(res is ListMessagesResponse);
 }
 
-
-@test:Config {dataProvider:  dataGen, dependsOn: [testCreateThread,testCreateAssistant]}
-isolated function  testCreateRun(DataPassingObject dataPasser) {
+@test:Config {dataProvider: dataGen, dependsOn: [testCreateThread, testCreateAssistant]}
+isolated function testCreateRun(DataPassingObject dataPasser) {
     CreateRunRequest runReq = {
-        assistant_id: dataPasser.assistantId, 
+        assistant_id: dataPasser.assistantId,
         model: "gpt-3.5-turbo",
         instructions: "You are a personal math tutor. Assist the user with their math questions.",
         temperature: 0.7,
@@ -140,8 +139,8 @@ isolated function  testCreateRun(DataPassingObject dataPasser) {
     }
 }
 
-@test:Config {dataProvider:  dataGen, dependsOn: [testCreateThread]}
-isolated function  testListRuns(DataPassingObject dataPasser) returns error? {
+@test:Config {dataProvider: dataGen, dependsOn: [testCreateThread]}
+isolated function testListRuns(DataPassingObject dataPasser) returns error? {
     ListRunsResponse|error res = AssistantClient->/threads/[dataPasser.threadId]/runs.get(headers);
     if (res is ListRunsResponse) {
         // io:println("Runs in Thread: ", res.data);
@@ -152,9 +151,9 @@ isolated function  testListRuns(DataPassingObject dataPasser) returns error? {
 }
 
 @test:Config {dependsOn: [testCreateAssistant]}
-isolated function  testCreateThreadAndRun() {
+isolated function testCreateThreadAndRun() {
     CreateThreadAndRunRequest createThreadAndRunReq = {
-        assistant_id: dataPasser.assistantId, 
+        assistant_id: dataPasser.assistantId,
         model: "gpt-3.5-turbo",
         instructions: "You are a personal math tutor. Assist the user with their math questions.",
         temperature: 0.7,
@@ -172,12 +171,12 @@ isolated function  testCreateThreadAndRun() {
     }
 }
 
-@test:Config {dataProvider:  dataGen}
-isolated function  testCreateThread(DataPassingObject dataPasser) {
+@test:Config {dataProvider: dataGen}
+isolated function testCreateThread(DataPassingObject dataPasser) {
     CreateThreadRequest createThreadReq = {
         messages: []
     };
-    
+
     ThreadObject|error response = AssistantClient->/threads.post(createThreadReq, headers);
     if (response is ThreadObject) {
         io:println("Thread ID: ", response.id);
@@ -188,8 +187,8 @@ isolated function  testCreateThread(DataPassingObject dataPasser) {
     }
 }
 
-@test:Config {dataProvider:  dataGen, dependsOn: [testCreateAssistant, testGetAssistant, testCreateRun, testGetRunStep, testGetRun, testListRunSteps]}
-isolated function  testDeleteAssistant(DataPassingObject dataPasser) {
+@test:Config {dataProvider: dataGen, dependsOn: [testCreateAssistant, testGetAssistant, testCreateRun, testGetRunStep, testGetRun, testListRunSteps]}
+isolated function testDeleteAssistant(DataPassingObject dataPasser) {
     // Ensure assistantId is not empty
     if (dataPasser.assistantId == "") {
         test:assertFail(msg = "No assistant ID available. Ensure assistant creation test runs first.");
@@ -205,9 +204,9 @@ isolated function  testDeleteAssistant(DataPassingObject dataPasser) {
     }
 }
 
-@test:Config {dataProvider:  dataGen, dependsOn: [testCreateAssistant]}
-isolated function  testGetAssistant(DataPassingObject dataPasser) {
-        // Ensure assistantId is not empty
+@test:Config {dataProvider: dataGen, dependsOn: [testCreateAssistant]}
+isolated function testGetAssistant(DataPassingObject dataPasser) {
+    // Ensure assistantId is not empty
     if (dataPasser.assistantId == "") {
         test:assertFail(msg = "No assistant ID available. Ensure you set assistantId before running this test.");
     }
@@ -222,18 +221,18 @@ isolated function  testGetAssistant(DataPassingObject dataPasser) {
     }
 }
 
-@test:Config {dataProvider:  dataGen, dependsOn: [testCreateRun]}
-isolated function  testListRunSteps(DataPassingObject dataPasser) {
+@test:Config {dataProvider: dataGen, dependsOn: [testCreateRun]}
+isolated function testListRunSteps(DataPassingObject dataPasser) {
     ListRunStepsResponse|error res = AssistantClient->/threads/[dataPasser.threadId]/runs/[dataPasser.runId]/steps.get(headers);
     test:assertTrue(res is ListRunStepsResponse);
     if (res is ListRunStepsResponse) {
         io:println("Steps in Run: ", res.data);
-        dataPasser.stepId = res.data.length()> 0 ? res.data[0].id:"";
+        dataPasser.stepId = res.data.length() > 0 ? res.data[0].id : "";
     }
 }
 
 @test:Config {dataProvider: dataGen}
-isolated function  testCreateAssistant(DataPassingObject dataPasser) {
+isolated function testCreateAssistant(DataPassingObject dataPasser) {
     AssistantToolsCode codeTool = {
         'type: "code_interpreter"
     };
@@ -257,7 +256,7 @@ isolated function  testCreateAssistant(DataPassingObject dataPasser) {
 }
 
 @test:Config {}
-isolated function  testListAssistants() {
+isolated function testListAssistants() {
 
     ListAssistantsQueries query = {
         before: "",
@@ -273,12 +272,12 @@ isolated function  testListAssistants() {
     }
 }
 
-@test:Config {dataProvider:  dataGen, dependsOn: [testCreateRun]}
-isolated function  testGetRunStep(DataPassingObject dataPasser) {
-    if dataPasser.stepId == ""{
+@test:Config {dataProvider: dataGen, dependsOn: [testCreateRun]}
+isolated function testGetRunStep(DataPassingObject dataPasser) {
+    if dataPasser.stepId == "" {
         test:assertEquals(dataPasser.stepId, "");
     }
-    else{
+    else {
         RunStepObject|error res = AssistantClient->/threads/[dataPasser.threadId]/runs/[dataPasser.runId]/steps/[dataPasser.stepId].get(headers);
         if (res is RunStepObject) {
             // io:println("Run Step Details: ", res);
@@ -287,12 +286,11 @@ isolated function  testGetRunStep(DataPassingObject dataPasser) {
             test:assertFail(msg = "Failed to retrieve the run step in the run");
         }
     }
-    
+
 }
 
-
-@test:Config {dataProvider:  dataGen, dependsOn: [testCreateThread, testCreateMessage, testDeleteMessage,testGetThread,testListMessages, testGetRunStep,testGetRun, testListRunSteps, testListRuns]}
-isolated function  testDeleteThread(DataPassingObject dataPasser) {
+@test:Config {dataProvider: dataGen, dependsOn: [testCreateThread, testCreateMessage, testDeleteMessage, testGetThread, testListMessages, testGetRunStep, testGetRun, testListRunSteps, testListRuns]}
+isolated function testDeleteThread(DataPassingObject dataPasser) {
     // Ensure threadId is not empty
     if (dataPasser.threadId == "") {
         test:assertFail(msg = "No thread ID available. Ensure thread creation test runs first.");
@@ -308,9 +306,9 @@ isolated function  testDeleteThread(DataPassingObject dataPasser) {
     }
 }
 
-@test:Config {dataProvider:  dataGen, dependsOn: [testCreateThread]}
-isolated function  testGetThread(DataPassingObject dataPasser) {
-        // Ensure threadId is not empty
+@test:Config {dataProvider: dataGen, dependsOn: [testCreateThread]}
+isolated function testGetThread(DataPassingObject dataPasser) {
+    // Ensure threadId is not empty
     if (dataPasser.threadId == "") {
         test:assertFail(msg = "No thread ID available. Ensure testCreateThread runs first.");
     }
@@ -326,8 +324,8 @@ isolated function  testGetThread(DataPassingObject dataPasser) {
 
 }
 
-@test:Config {dataProvider:  dataGen, dependsOn: [testCreateRun]}
-isolated function  testGetRun(DataPassingObject dataPasser) {
+@test:Config {dataProvider: dataGen, dependsOn: [testCreateRun]}
+isolated function testGetRun(DataPassingObject dataPasser) {
     RunObject|error res = AssistantClient->/threads/[dataPasser.threadId]/runs/[dataPasser.runId].get(headers);
     if (res is RunObject) {
         io:println("Run Details: ", res);

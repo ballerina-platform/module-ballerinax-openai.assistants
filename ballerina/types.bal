@@ -801,8 +801,8 @@ public type RunStepDetailsToolCallsCodeObject_code_interpreter record {
 public type ListMessagesResponse record {
     string 'object;
     MessageObject[] data;
-    string first_id;
-    string last_id;
+    string? first_id;
+    string? last_id;
     boolean has_more;
 };
 
@@ -934,3 +934,4 @@ public type CreateThreadRequest_tool_resources_file_search record {
     @constraint:Array {maxLength: 1}
     CreateAssistantRequest_tool_resources_file_search_vector_stores[] vector_stores?;
 };
+

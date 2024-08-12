@@ -11838,9 +11838,11 @@ components:
                 first_id:
                     type: string
                     example: "msg_abc123"
+                    nullable: true
                 last_id:
                     type: string
                     example: "msg_abc123"
+                    nullable: true
                 has_more:
                     type: boolean
                     example: false

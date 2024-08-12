@@ -83,6 +83,20 @@ This document records the sanitation done on top of the official OpenAPI specifi
 
    - **Reason**: This change addresses the payload binding failures occurring due to the inclusion of `expired_at` and `metadata` as required fields.
 
+6. **ListMessageObject schema: `first_id` and `last_id` attributes were made nullable (`nullable: true`)**:
+
+   - **Changed Schema**: `ListMessageObject`
+
+   - **Original**:
+      - `first_id`: `string`
+      - `last_id`: `string`
+
+   - **Updated**:
+      - `first_id`: `string?`
+      - `last_id`: `string?`
+
+   - **Reason**: This change is necessary to prevent binding errors that occur when there are no messages in the thread, as `first_id` and `last_id` need to be nullable in such cases.
+
 ---
 
 ## OpenAPI cli command

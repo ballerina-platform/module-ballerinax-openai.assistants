@@ -19,7 +19,6 @@ import ballerina/log;
 
 listener http:Listener httpListener = new (9090);
 
-
 # Description.
 #
 # + body - field description  

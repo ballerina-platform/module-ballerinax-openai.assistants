@@ -19,6 +19,49 @@ import ballerina/log;
 
 listener http:Listener httpListener = new (9090);
 
+
+# Description.
+#
+# + body - field description  
+# + headers - field description
+public type OkMessageObject record {|
+    *http:Ok;
+    MessageObject body;
+    map<string|string[]> headers;
+|};
+
+# Description.
+#
+# + body - field description  
+# + headers - field description
+public type OkRunObject record {|
+    *http:Ok;
+    RunObject body;
+    map<string|string[]> headers;
+|};
+
+
+# Description.
+#
+# + body - field description  
+# + headers - field description
+public type OkAssistantObject record {|
+    *http:Ok;
+    AssistantObject body;
+    map<string|string[]> headers;
+|};
+
+# Description.
+#
+# + body - field description  
+# + headers - field description
+public type OkThreadObject record {|
+    *http:Ok;
+    ThreadObject body;
+    map<string|string[]> headers;
+|};
+
+
 http:Service mockService = service object {
     # Delete an assistant.
     #

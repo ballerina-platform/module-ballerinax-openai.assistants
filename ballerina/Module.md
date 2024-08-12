@@ -2,7 +2,7 @@
 
 OpenAI is an American artificial intelligence research organization that comprises both a non-profit and a for-profit entity. The organization focuses on conducting cutting-edge AI research with the goal of developing friendly AI that benefits humanity. By advancing the state of AI, OpenAI aims to ensure that powerful AI technologies are used responsibly and ethically, promoting innovation while addressing potential risks.
 
-The [OpenAI Assistants API](https://platform.openai.com/docs/api-reference/assistants) Connector allows developers to seamlessly integrate OpenAI's advanced language models into their applications. This connector provides tools to build powerful [OpenAI Assistants](https://platform.openai.com/docs/assistants/overview) capable of performing a wide range of tasks, such as generating human-like text, managing conversations with persistent threads, and utilizing multiple tools in parallel. OpenAI has recently announced a variety of new features and improvements to the Assistants API, moving their Beta to a [new API version](https://platform.openai.com/docs/assistants/whats-new), `OpenAI-Beta: assistants=v2`. 
+The `ballarinax/openai.images` connector allows developers to seamlessly integrate OpenAI's advanced language models into their applications by interacting with [OpenAI API v1](https://platform.openai.com/docs/api-reference/assistants). This connector provides tools to build powerful [OpenAI Assistants](https://platform.openai.com/docs/assistants/overview) capable of performing a wide range of tasks, such as generating human-like text, managing conversations with persistent threads, and utilizing multiple tools in parallel. OpenAI has recently announced a variety of new features and improvements to the Assistants API, moving their Beta to a [new API version](https://platform.openai.com/docs/assistants/whats-new), `OpenAI-Beta: assistants=v2`. The users can interact with both the API v1 and v2 by [passing the respective API version header in the request](https://platform.openai.com/docs/assistants/migration/changing-beta-versions)  
 
 
 ## Setup guide
@@ -109,15 +109,9 @@ public function main() returns error? {
         tools: [tool]
     };
 
-   // call the `post assistants` resource to create an Assistant
-   var response = check AssistantClient->/assistants.post(request, headers);
-    io:println("Assistant ID: ", response);
-
-    if (response is openai_assistants:AssistantObject) {
-        io:println("Assistant created: ", response);
-    } else {
-        io:println("Error: ", response);
-    }
+    // call the `post assistants` resource to create an Assistant
+    openai_assistants:AssistantObject assistantResponse = check AssistantClient->/assistants.post(request, headers);
+    io:println("Assistant ID: ", assistantResponse.id);
 }
 ```
 
@@ -132,12 +126,9 @@ public function main() returns error?{
     };
 
     // Call the `post threads` resource to create a Thread
-    var threadResponse = check AssistantClient->/threads.post(createThreadReq, headers);
-    if (threadResponse is openai_assistants:ThreadObject){
-        io:println("Thread ID: ", threadResponse.id);
-    } else{
-        io:println("Error creating thread: ", threadResponse);
-    }
+    openai_assistants:ThreadObject threadResponse = check AssistantClient->/threads.post(createThreadReq, headers);
+    io:println("Thread ID: ", threadResponse.id);
+
 }
 ```
 
@@ -156,12 +147,8 @@ public function main() returns error?{
     };
 
     // Create a message in the thread
-    var messageResponse = check AssistantClient->/threads/[threadId]/messages.post(createMsgReq, headers);
-    if (messageResponse is openai_assistants:MessageObject){
-        io:println("Created Message: ", messageResponse);
-    } else {
-        io:println("Error creating Message: ", messageResponse);
-    }
+    openai_assistants:MessageObject messageResponse = check AssistantClient->/threads/[threadId]/messages.post(createMsgReq, headers);
+    io:println("Created Message: ", messageResponse);
 }
 ```
 
@@ -185,12 +172,9 @@ public function main() returns error?{
     };
 
     // Create a run in the thread
-    var resp = AssistantClient->/threads/[threadId]/runs.post(runReq, headers);
-    if (resp is openai_assistants:RunObject) {
-        io:println("Created Run: ", resp);
-    } else {
-        io:println("Error creating run: ", resp);
-    }
+    openai_assistants:RunObject runResponse = check AssistantClient->/threads/[threadId]/runs.post(runReq, headers);
+    io:println("Created Run: ", runResponse);
+
 }
 ```
 Once the Run completes, you can list the Messages added to the Thread by the Assistant.
@@ -198,17 +182,9 @@ Once the Run completes, you can list the Messages added to the Thread by the Ass
 public function main() returns error?{
     string threadId = "your_thread_id";
 
-    map<string|string[]> headers = {
-        "OpenAI-Beta": ["assistants=v2"]
-    };
-
     // List messages in the thread
-    var res = AssistantClient->/threads/[threadId]/messages.get(headers);
-    if (res is openai_assistants:ListMessagesResponse) {
-        io:println("Messages of Thread: ", res);
-    } else {
-        io:println("Error retrieving messages: ", res);
-    }
+    openai_assistants:ListMessagesResponse listResponse = AssistantClient->/threads/[threadId]/messages.get(headers);
+    io:println("Messages of Thread: ", listResponse);
 }
 ```
 

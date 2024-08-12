@@ -83,6 +83,20 @@ This document records the sanitation done on top of the official OpenAPI specifi
 
    - **Reason**: This change addresses the payload binding failures occurring due to the inclusion of `expired_at` and `metadata` as required fields.
 
+6. **ListMessageObject schema: `first_id` and `last_id` attributes were made nullable (`nullable: true`)**:
+
+   - **Changed Schema**: `ListMessageObject`
+
+   - **Original**:
+      - `first_id`: `string`
+      - `last_id`: `string`
+
+   - **Updated**:
+      - `first_id`: `string?`
+      - `last_id`: `string?`
+
+   - **Reason**: This change is necessary to prevent binding errors that occur when there are no messages in the thread, as `first_id` and `last_id` need to be nullable in such cases.
+
 ---
 
 ## OpenAPI cli command
@@ -90,6 +104,6 @@ This document records the sanitation done on top of the official OpenAPI specifi
 The following command was used to generate the Ballerina client from the OpenAPI specification. The command should be executed from the repository root directory.
 
 ```bash
-bal openapi -i docs/spec/openapi.yaml --mode client --tags Assistants --license docs/license.txt -o ballerina
+bal openapi -i docs/spec/openapi.yaml --mode client --tags Images --license docs/license.txt -o ballerina
 ```
 Note: The license year is hardcoded to 2024, change if necessary.

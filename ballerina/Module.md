@@ -109,7 +109,7 @@ public function main() returns error? {
         tools: [tool]
     };
 
-    // Call the `post assistants` resource to create an Assistant
+   // call the `post assistants` resource to create an Assistant
    var response = check AssistantClient->/assistants.post(request, headers);
     io:println("Assistant ID: ", response);
 

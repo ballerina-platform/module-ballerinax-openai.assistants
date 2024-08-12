@@ -526,12 +526,6 @@ public type ListMessagesQueries record {
     "asc"|"desc" 'order = "desc";
 };
 
-public type OkThreadObject record {|
-    *http:Ok;
-    ThreadObject body;
-    map<string|string[]> headers;
-|};
-
 public type FunctionObject record {
     # A description of what the function does, used by the model to choose when and how to call the function.
     string description?;
@@ -667,12 +661,6 @@ public type RunStepDetailsToolCallsFileSearchObject record {
     record {} file_search;
 };
 
-public type OkRunObject record {|
-    *http:Ok;
-    RunObject body;
-    map<string|string[]> headers;
-|};
-
 # Represents an `assistant` that can call the model and use tools.
 public type AssistantObject record {
     # The identifier, which can be referenced in API endpoints.
@@ -755,12 +743,6 @@ public type AssistantObject_tool_resources_code_interpreter record {
     @constraint:Array {maxLength: 20}
     string[] file_ids = [];
 };
-
-public type OkMessageObject record {|
-    *http:Ok;
-    MessageObject body;
-    map<string|string[]> headers;
-|};
 
 # An object describing the expected output of the model. If `json_object` only `function` type `tools` are allowed to be passed to the Run. If `text` the model can return text or any value needed.
 public type AssistantsApiResponseFormat record {
@@ -953,8 +935,3 @@ public type CreateThreadRequest_tool_resources_file_search record {
     CreateAssistantRequest_tool_resources_file_search_vector_stores[] vector_stores?;
 };
 
-public type OkAssistantObject record {|
-    *http:Ok;
-    AssistantObject body;
-    map<string|string[]> headers;
-|};

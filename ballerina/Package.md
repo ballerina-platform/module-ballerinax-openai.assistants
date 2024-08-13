@@ -29,46 +29,20 @@ To use the OpenAI Connector, you must have access to the OpenAI API through a [O
 5. Store the API key securely to use in your application 
 <img src=https://github.com/user-attachments/assets/bbbf8f38-d551-40ee-9664-f4cf2bd98997 alt="OpenAI Platform" style="width: 70%;">
 
-
-
 ## Quickstart
 
-A typical integration of the Assistants API has the following flow:
-
-1. **Create an Assistant**
-    - Define its custom instructions and pick a model.
-    - If helpful, add files and enable tools like Code Interpreter, File Search, and Function calling.
-
-2. **Create a Thread**
-    - Create a Thread when a user starts a conversation.
-
-3. **Add Messages to the Thread**
-    - Add Messages to the Thread as the user asks questions.
-
-4. **Run the Assistant**
-    - Run the Assistant on the Thread to generate a response by calling the model and the tools.
-
-This starter guide walks through the key steps to create and run an Assistant that uses the Code Interpreter tool. In this example, we're creating an Assistant that is a personal math tutor.
-### Setting HTTP Headers in Ballerina
-
-Calls to the Assistants API require that you pass a beta HTTP header. In Ballerina, you can define the header as follows:
-
-```ballerina
-final map<string|string[]> headers = {
-    "OpenAI-Beta": ["assistants=v2"]
-};
-```
-
-### Step 1 : Setting up the connector
 To use the `OpenAI Assistants` connector in your Ballerina application, update the `.bal` file as follows:
+### Step 1: Import the module
 
-1. Import the `openai.assistants` module.
+Import the `openai.assistants` module.
 
 ```ballerina
 import ballerinax/openai.assistants;
 ```
 
-2. Create a `assistants:ConnectionConfig` with the obtained access token and initialize the connector with it.
+### Step 2: Instantiate a new connector
+
+Create a `assistants:ConnectionConfig` with the obtained access token and initialize the connector with it.
 
 ```ballerina
 configurable string token = ?;
@@ -80,11 +54,21 @@ final assistants:Client openAIAssistant = check new({
 });
 ```
 
-### Step 2: Create an Assistant
+#### Setting HTTP Headers in Ballerina
 
-Now, utilize the available connector operations to create an Assistant.
+Calls to the Assistants API require that you pass a beta HTTP header. In Ballerina, you can define the header as follows:
 
+```ballerina
+final map<string|string[]> headers = {
+    "OpenAI-Beta": ["assistants=v2"]
+};
+```
 
+### Step 3: Invoke the connector operations
+
+Now, utilize the available connector operations.
+
+#### Generate an assistant
 
 ```ballerina
 public function main() returns error? {
@@ -108,7 +92,7 @@ public function main() returns error? {
 }
 ```
 
-### Step 3: Create a thread
+#### Create a thread
 
 A Thread represents a conversation between a user and one or many Assistants. You can create a Thread when a user (or your AI application) starts a conversation with your Assistant.
 
@@ -124,7 +108,7 @@ public function main() returns error?{
 }
 ```
 
-### Step 4: Add a message to the thread
+#### Add a message to the thread
 
 The contents of the messages your users or applications create are added as Message objects to the Thread. Messages can contain both text and files. There is no limit to the number of Messages you can add to Threads — the context that does not fit into the model's context window will be truncated automatically.
 
@@ -145,7 +129,7 @@ public function main() returns error?{
 ```
 
 
-### Step 5: Create a run
+#### Create a run
 
 Once all the user Messages have been added to the Thread, you can Run the Thread with any Assistant. Creating a Run uses the model and tools associated with the Assistant to generate a response. These responses are added to the Thread as Assistant Messages.
 
@@ -178,6 +162,12 @@ public function main() returns error?{
     // list messages in the thread
     assistants:ListMessagesResponse listResponse = openAIAssistant->/threads/[threadId]/messages.get(headers);
 }
+```
+
+### Step 4: Run the Ballerina application
+
+```bash
+bal run
 ```
 
 ## Examples

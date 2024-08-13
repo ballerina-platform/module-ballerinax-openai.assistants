@@ -38,7 +38,6 @@ To use the OpenAI Connector, you must have access to the OpenAI API through a [O
 <img src=https://github.com/user-attachments/assets/bbbf8f38-d551-40ee-9664-f4cf2bd98997 alt="OpenAI Platform" style="width: 70%;">
 
 
-
 ## Quickstart
 
 A typical integration of the Assistants API has the following flow:
@@ -87,7 +86,7 @@ token = "<Access Token>"
 ```ballerina
 configurable string token = ?;
 
-final assistants:Client AssistantClient = check new({
+final assistants:Client openAIAssistant = check new({
     auth: {
         token
     }
@@ -118,8 +117,7 @@ public function main() returns error? {
     };
 
     // call the `post assistants` resource to create an Assistant
-    assistants:AssistantObject assistantResponse = check AssistantClient->/assistants.post(request, headers);
-    io:println("Assistant ID: ", assistantResponse.id);
+    assistants:AssistantObject assistantResponse = check openAIAssistant->/assistants.post(request, headers);
 }
 ```
 
@@ -135,9 +133,7 @@ public function main() returns error?{
     };
 
     // call the `post threads` resource to create a Thread
-    assistants:ThreadObject threadResponse = check AssistantClient->/threads.post(createThreadReq, headers);
-    io:println("Thread ID: ", threadResponse.id);
-
+    assistants:ThreadObject threadResponse = check openAIAssistant->/threads.post(createThreadReq, headers);
 }
 ```
 
@@ -157,8 +153,7 @@ public function main() returns error?{
     };
 
     // create a message in the thread
-    assistants:MessageObject messageResponse = check AssistantClient->/threads/[threadId]/messages.post(createMsgReq, headers);
-    io:println("Created Message: ", messageResponse);
+    assistants:MessageObject messageResponse = check openAIAssistant->/threads/[threadId]/messages.post(createMsgReq, headers);
 }
 ```
 
@@ -183,8 +178,7 @@ public function main() returns error?{
     };
 
     // create a run in the thread
-    assistants:RunObject runResponse = check AssistantClient->/threads/[threadId]/runs.post(runReq, headers);
-    io:println("Created Run: ", runResponse);
+    assistants:RunObject runResponse = check openAIAssistant->/threads/[threadId]/runs.post(runReq, headers);
 
 }
 ```
@@ -195,8 +189,7 @@ public function main() returns error?{
     string threadId = "your_thread_id";
 
     // list messages in the thread
-    assistants:ListMessagesResponse listResponse = AssistantClient->/threads/[threadId]/messages.get(headers);
-    io:println("Messages of Thread: ", listResponse);
+    assistants:ListMessagesResponse listResponse = openAIAssistant->/threads/[threadId]/messages.get(headers);
 }
 ```
 

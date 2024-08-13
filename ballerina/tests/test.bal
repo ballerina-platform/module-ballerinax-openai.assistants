@@ -83,7 +83,6 @@ isolated function testCreateMessage(DataPassingObject dataPasser) returns error?
     };
 
     MessageObject res = check openaiAssistant->/threads/[dataPasser.threadId]/messages.post(createMsgReq, headers);
-
     io:println("Created Message: ", res);
     test:assertNotEquals(res.id, "");
     dataPasser.messageId = res.id;
@@ -140,9 +139,8 @@ isolated function testCreateThreadAndRun() returns error? {
     // };
 
     // RunObject resp = check openaiAssistant->/threads/runs.post(createThreadAndRunReq, headers);
-
-    //     io:println("Created Thread and Run: ", resp);
-    //     test:assertNotEquals(resp.id, "", msg = "Thread and Run creation failed: No Run ID returned");
+    // io:println("Created Thread and Run: ", resp);
+    // test:assertNotEquals(resp.id, "", msg = "Thread and Run creation failed: No Run ID returned");
 
 }
 
@@ -230,7 +228,7 @@ isolated function testListAssistants() returns error? {
 @test:Config {dataProvider: dataGen, dependsOn: [testCreateRun]}
 isolated function testGetRunStep(DataPassingObject dataPasser) returns error? {
     if dataPasser.stepId == "" {
-        test:assertEquals(dataPasser.stepId, "");
+        test:assertEquals(dataPasser.stepId, "", msg = "No step ID available.");
     }
     else {
         RunStepObject res = check openaiAssistant->/threads/[dataPasser.threadId]/runs/[dataPasser.runId]/steps/[dataPasser.stepId].get(headers);

@@ -68,7 +68,7 @@ To use the `OpenAI Assistants` connector in your Ballerina application, update t
 import ballerinax/openai.assistants;
 ```
 
-2. Create a `assistants:Client` with the obtained access token and initialize the connector with it.
+2. Create a `assistants:ConnectionConfig` with the obtained access token and initialize the connector with it.
 
 ```ballerina
 configurable string token = ?;

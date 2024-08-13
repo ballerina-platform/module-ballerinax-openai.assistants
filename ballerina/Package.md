@@ -121,11 +121,12 @@ A Thread represents a conversation between a user and one or many Assistants. Yo
 
 ```ballerina
 public function main() returns error?{
+    // define the thread request 
     openai_assistants:CreateThreadRequest createThreadReq = {
         messages: []
     };
 
-    // Call the `post threads` resource to create a Thread
+    // call the `post threads` resource to create a Thread
     openai_assistants:ThreadObject threadResponse = check AssistantClient->/threads.post(createThreadReq, headers);
     io:println("Thread ID: ", threadResponse.id);
 
@@ -134,19 +135,20 @@ public function main() returns error?{
 
 ### Step 4: Add a message to the thread
 
-The contents of the messages your users or applications create are added as Message objects to the Thread. Messages can contain both text and files. There is no limit to the number of Messages you can add to Threads — we smartly truncate any context that does not fit into the model's context window.
+The contents of the messages your users or applications create are added as Message objects to the Thread. Messages can contain both text and files. There is no limit to the number of Messages you can add to Threads — the context that does not fit into the model's context window will be truncated automatically.
 
 ```ballerina
 public function main() returns error?{
     string threadId = "your_thread_id";
 
+    // define the message object
     openai_assistants:CreateMessageRequest createMsgReq = {
         role: "user",
         content: "Can you help me solve the equation `3x + 11 = 14`?",
         metadata: {}
     };
 
-    // Create a message in the thread
+    // create a message in the thread
     openai_assistants:MessageObject messageResponse = check AssistantClient->/threads/[threadId]/messages.post(createMsgReq, headers);
     io:println("Created Message: ", messageResponse);
 }
@@ -159,8 +161,9 @@ Once all the user Messages have been added to the Thread, you can Run the Thread
 
 ```ballerina
 public function main() returns error?{
-   string threadId = "your_thread_id";
+    string threadId = "your_thread_id";
 
+    // define the run request object
     openai_assistants:CreateRunRequest runReq = {
         assistant_id: "your_assistant_id",
         model: "gpt-3.5-turbo",
@@ -171,18 +174,19 @@ public function main() returns error?{
         max_completion_tokens: 200
     };
 
-    // Create a run in the thread
+    // create a run in the thread
     openai_assistants:RunObject runResponse = check AssistantClient->/threads/[threadId]/runs.post(runReq, headers);
     io:println("Created Run: ", runResponse);
 
 }
 ```
 Once the Run completes, you can list the Messages added to the Thread by the Assistant.
+
 ```ballerina
 public function main() returns error?{
     string threadId = "your_thread_id";
 
-    // List messages in the thread
+    // list messages in the thread
     openai_assistants:ListMessagesResponse listResponse = AssistantClient->/threads/[threadId]/messages.get(headers);
     io:println("Messages of Thread: ", listResponse);
 }

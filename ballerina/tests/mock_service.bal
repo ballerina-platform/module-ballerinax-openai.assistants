@@ -39,7 +39,6 @@ public type OkRunObject record {|
     map<string|string[]> headers;
 |};
 
-
 # Description.
 #
 # + body - field description  
@@ -59,7 +58,6 @@ public type OkThreadObject record {|
     ThreadObject body;
     map<string|string[]> headers;
 |};
-
 
 http:Service mockService = service object {
     # Delete an assistant.
@@ -646,7 +644,7 @@ http:Service mockService = service object {
             "response_format": "auto"
 
         };
-        
+
         OkAssistantObject response = {
             status: new http:StatusOK(),
             body: assistant,
@@ -683,7 +681,7 @@ http:Service mockService = service object {
             "metadata": {},
             "response_format": "auto"
         };
-        
+
         OkAssistantObject response = {
             status: new http:StatusOK(),
             body: assistant,
@@ -703,7 +701,7 @@ http:Service mockService = service object {
             "metadata": {},
             "tool_resources": {}
         };
-        
+
         OkThreadObject response = {
             status: new http:StatusOK(),
             body: thread,
@@ -728,7 +726,7 @@ http:Service mockService = service object {
                 }
             }
         };
-        
+
         OkThreadObject response = {
             status: new http:StatusOK(),
             body: thread,
@@ -762,7 +760,7 @@ http:Service mockService = service object {
             "attachments": [],
             "metadata": {}
         };
-        
+
         OkMessageObject response = {
             status: new http:StatusOK(),
             body: message,
@@ -779,26 +777,26 @@ http:Service mockService = service object {
     # + return - OK 
     resource function post threads/[string thread_id]/messages/[string message_id](@http:Payload ModifyMessageRequest payload) returns OkMessageObject {
         MessageObject message = {
-        "id": "msg_dNdBUSpsQt6bqCWjxi2O7RRo",
-        "object": "thread.message",
-        "created_at": 1723097972,
-        "assistant_id": null,
-        "thread_id": "thread_wvSOSaULwzdE1R83LtKrVggv",
-        "run_id": null,
-        "role": "user",
-        "content": [
-            {
-                "type": "text",
-                "text": {
-                    "value": "I want to calculate the following calculation: 345 x 897. Can you help me?",
-                    "annotations": []
+            "id": "msg_dNdBUSpsQt6bqCWjxi2O7RRo",
+            "object": "thread.message",
+            "created_at": 1723097972,
+            "assistant_id": null,
+            "thread_id": "thread_wvSOSaULwzdE1R83LtKrVggv",
+            "run_id": null,
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": {
+                        "value": "I want to calculate the following calculation: 345 x 897. Can you help me?",
+                        "annotations": []
+                    }
                 }
-            }
-        ],
-        "file_ids": [],
-        "metadata": {}
-    };
-        
+            ],
+            "file_ids": [],
+            "metadata": {}
+        };
+
         OkMessageObject response = {
             status: new http:StatusOK(),
             body: message,
@@ -849,7 +847,7 @@ http:Service mockService = service object {
             "tool_choice": "auto",
             "parallel_tool_calls": true
         };
-        
+
         OkRunObject response = {
             status: new http:StatusOK(),
             body: run,
@@ -905,7 +903,7 @@ http:Service mockService = service object {
             "tool_choice": "auto",
             "parallel_tool_calls": true
         };
-        
+
         OkRunObject response = {
             status: new http:StatusOK(),
             body: run,
@@ -971,7 +969,7 @@ http:Service mockService = service object {
             "tool_choice": "auto",
             "parallel_tool_calls": true
         };
-        
+
         OkRunObject response = {
             status: new http:StatusOK(),
             body: run,

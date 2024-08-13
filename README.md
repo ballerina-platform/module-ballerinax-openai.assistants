@@ -70,10 +70,10 @@ final map<string|string[]> headers = {
 ### Step 1 : Setting up the connector
 To use the `OpenAI Assistants` connector in your Ballerina application, update the `.bal` file as follows:
 
-1. Import the `openai_assistants` module.
+1. Import the `openai.assistants` module.
 
 ```ballerina
-import ballerinax/openai_assistants;
+import ballerinax/openai.assistants;
 ```
 
 2. Create a `Config.toml` file and configure the obtained credentials as follows:
@@ -82,12 +82,12 @@ import ballerinax/openai_assistants;
 token = "<Access Token>"
 ```
 
-3. Create a `openai_assistants:Client` with the obtained access token and initialize the connector with it.
+3. Create a `assistants:Client` with the obtained access token and initialize the connector with it.
 
 ```ballerina
 configurable string token = ?;
 
-final openai_assistants:Client AssistantClient = check new({
+final assistants:Client AssistantClient = check new({
     auth: {
         token
     }
@@ -104,12 +104,12 @@ Now, utilize the available connector operations to create an Assistant.
 public function main() returns error? {
 
     // define the required tool
-    openai_assistants:AssistantToolsCode tool = {
+    assistants:AssistantToolsCode tool = {
         type: "code_interpreter"
     };
 
     // define the assistant request object
-    openai_assistants:CreateAssistantRequest request = {
+    assistants:CreateAssistantRequest request = {
         model: "gpt-3.5-turbo",
         name: "Math Tutor",
         description: "An Assistant for personal math tutoring",
@@ -118,7 +118,7 @@ public function main() returns error? {
     };
 
     // call the `post assistants` resource to create an Assistant
-    openai_assistants:AssistantObject assistantResponse = check AssistantClient->/assistants.post(request, headers);
+    assistants:AssistantObject assistantResponse = check AssistantClient->/assistants.post(request, headers);
     io:println("Assistant ID: ", assistantResponse.id);
 }
 ```
@@ -130,12 +130,12 @@ A Thread represents a conversation between a user and one or many Assistants. Yo
 ```ballerina
 public function main() returns error?{
     // define the thread request 
-    openai_assistants:CreateThreadRequest createThreadReq = {
+    assistants:CreateThreadRequest createThreadReq = {
         messages: []
     };
 
     // call the `post threads` resource to create a Thread
-    openai_assistants:ThreadObject threadResponse = check AssistantClient->/threads.post(createThreadReq, headers);
+    assistants:ThreadObject threadResponse = check AssistantClient->/threads.post(createThreadReq, headers);
     io:println("Thread ID: ", threadResponse.id);
 
 }
@@ -150,14 +150,14 @@ public function main() returns error?{
     string threadId = "your_thread_id";
 
     // define the message object
-    openai_assistants:CreateMessageRequest createMsgReq = {
+    assistants:CreateMessageRequest createMsgReq = {
         role: "user",
         content: "Can you help me solve the equation `3x + 11 = 14`?",
         metadata: {}
     };
 
     // create a message in the thread
-    openai_assistants:MessageObject messageResponse = check AssistantClient->/threads/[threadId]/messages.post(createMsgReq, headers);
+    assistants:MessageObject messageResponse = check AssistantClient->/threads/[threadId]/messages.post(createMsgReq, headers);
     io:println("Created Message: ", messageResponse);
 }
 ```
@@ -172,7 +172,7 @@ public function main() returns error?{
     string threadId = "your_thread_id";
 
     // define the run request object
-    openai_assistants:CreateRunRequest runReq = {
+    assistants:CreateRunRequest runReq = {
         assistant_id: "your_assistant_id",
         model: "gpt-3.5-turbo",
         instructions: "You are a personal math tutor. Assist the user with their math questions.",
@@ -183,7 +183,7 @@ public function main() returns error?{
     };
 
     // create a run in the thread
-    openai_assistants:RunObject runResponse = check AssistantClient->/threads/[threadId]/runs.post(runReq, headers);
+    assistants:RunObject runResponse = check AssistantClient->/threads/[threadId]/runs.post(runReq, headers);
     io:println("Created Run: ", runResponse);
 
 }
@@ -195,7 +195,7 @@ public function main() returns error?{
     string threadId = "your_thread_id";
 
     // list messages in the thread
-    openai_assistants:ListMessagesResponse listResponse = AssistantClient->/threads/[threadId]/messages.get(headers);
+    assistants:ListMessagesResponse listResponse = AssistantClient->/threads/[threadId]/messages.get(headers);
     io:println("Messages of Thread: ", listResponse);
 }
 ```

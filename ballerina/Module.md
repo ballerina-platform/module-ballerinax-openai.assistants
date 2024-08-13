@@ -68,7 +68,7 @@ final map<string|string[]> headers = {
 
 Now, utilize the available connector operations.
 
-#### Generate an assistant
+#### Create an assistant
 
 ```ballerina
 public function main() returns error? {

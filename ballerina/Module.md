@@ -47,7 +47,7 @@ Create a `assistants:ConnectionConfig` with the obtained access token and initia
 ```ballerina
 configurable string token = ?;
 
-final assistants:Client openAIAssistant = check new({
+final assistants:Client openAIAssistant = check new ({
     auth: {
         token
     }
@@ -97,7 +97,7 @@ public function main() returns error? {
 A Thread represents a conversation between a user and one or many Assistants. You can create a Thread when a user (or your AI application) starts a conversation with your Assistant.
 
 ```ballerina
-public function main() returns error?{
+public function main() returns error? {
     // define the thread request 
     assistants:CreateThreadRequest createThreadReq = {
         messages: []
@@ -113,7 +113,7 @@ public function main() returns error?{
 The contents of the messages your users or applications create are added as Message objects to the Thread. Messages can contain both text and files. There is no limit to the number of Messages you can add to Threads — the context that does not fit into the model's context window will be truncated automatically.
 
 ```ballerina
-public function main() returns error?{
+public function main() returns error? {
     string threadId = "your_thread_id";
 
     // define the message object
@@ -128,13 +128,12 @@ public function main() returns error?{
 }
 ```
 
-
 #### Create a run
 
 Once all the user Messages have been added to the Thread, you can Run the Thread with any Assistant. Creating a Run uses the model and tools associated with the Assistant to generate a response. These responses are added to the Thread as Assistant Messages.
 
 ```ballerina
-public function main() returns error?{
+public function main() returns error? {
     string threadId = "your_thread_id";
 
     // define the run request object
@@ -156,12 +155,13 @@ public function main() returns error?{
 Once the Run completes, you can list the Messages added to the Thread by the Assistant.
 
 ```ballerina
-public function main() returns error?{
+public function main() returns error? {
     string threadId = "your_thread_id";
 
     // list messages in the thread
-    assistants:ListMessagesResponse listResponse = openAIAssistant->/threads/[threadId]/messages.get(headers);
+    assistants:ListMessagesResponse listResponse = check openAIAssistant->/threads/[threadId]/messages.get(headers);
 }
+
 ```
 
 ### Step 4: Run the Ballerina application

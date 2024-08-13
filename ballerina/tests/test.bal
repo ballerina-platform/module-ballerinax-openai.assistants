@@ -26,7 +26,7 @@ ConnectionConfig config = {
         token
     }
 };
-final Client openaiAssistant = check new (config, serviceUrl);
+final Client openAIAssistant = check new (config, serviceUrl);
 
 public type DataPassingObject record {
     string assistantId = "";
@@ -53,7 +53,7 @@ isolated function testDeleteMessage(DataPassingObject dataPasser) returns error?
         test:assertFail(msg = "No thread ID or message ID available. Ensure message creation test runs first.");
     }
 
-    DeleteMessageResponse res = check openaiAssistant->/threads/[dataPasser.threadId]/messages/[dataPasser.messageId].delete(headers);
+    DeleteMessageResponse res = check openAIAssistant->/threads/[dataPasser.threadId]/messages/[dataPasser.messageId].delete(headers);
     io:println("Message deleted successfully: ", res);
     test:assertTrue(res.deleted == true, msg = "Failed to delete message");
 
@@ -65,7 +65,7 @@ isolated function testGetMessage(DataPassingObject dataPasser) returns error? {
         test:assertFail(msg = "No thread ID or message ID available. Ensure thread creation and message creation tests run first.");
     }
 
-    MessageObject res = check openaiAssistant->/threads/[dataPasser.threadId]/messages/[dataPasser.messageId].get(headers);
+    MessageObject res = check openAIAssistant->/threads/[dataPasser.threadId]/messages/[dataPasser.messageId].get(headers);
     io:println("Message Details: ", res);
     test:assertEquals(res.id, dataPasser.messageId, msg = "Retrieved message ID does not match the requested ID");
 
@@ -82,7 +82,7 @@ isolated function testCreateMessage(DataPassingObject dataPasser) returns error?
         content: "Can you help me solve the equation `3x + 11 = 14`?"
     };
 
-    MessageObject res = check openaiAssistant->/threads/[dataPasser.threadId]/messages.post(createMsgReq, headers);
+    MessageObject res = check openAIAssistant->/threads/[dataPasser.threadId]/messages.post(createMsgReq, headers);
     io:println("Created Message: ", res);
     test:assertNotEquals(res.id, "");
     dataPasser.messageId = res.id;
@@ -95,7 +95,7 @@ isolated function testListMessages(DataPassingObject dataPasser) returns error? 
         test:assertFail(msg = "No thread ID available. Ensure thread creation test runs first.");
     }
 
-    ListMessagesResponse res = check openaiAssistant->/threads/[dataPasser.threadId]/messages.get(headers);
+    ListMessagesResponse res = check openAIAssistant->/threads/[dataPasser.threadId]/messages.get(headers);
     io:println("ListMessagesResponse: ", res);
     test:assertTrue(res is ListMessagesResponse);
 }
@@ -112,7 +112,7 @@ isolated function testCreateRun(DataPassingObject dataPasser) returns error? {
         max_completion_tokens: 200
     };
 
-    RunObject resp = check openaiAssistant->/threads/[dataPasser.threadId]/runs.post(runReq, headers);
+    RunObject resp = check openAIAssistant->/threads/[dataPasser.threadId]/runs.post(runReq, headers);
     io:println("Created Run: ", resp);
     test:assertNotEquals(resp.id, "", msg = "Run creation failed: No Run ID returned");
     dataPasser.runId = resp.id;
@@ -120,7 +120,7 @@ isolated function testCreateRun(DataPassingObject dataPasser) returns error? {
 
 @test:Config {dataProvider: dataGen, dependsOn: [testCreateThread]}
 isolated function testListRuns(DataPassingObject dataPasser) returns error? {
-    ListRunsResponse res = check openaiAssistant->/threads/[dataPasser.threadId]/runs.get(headers);
+    ListRunsResponse res = check openAIAssistant->/threads/[dataPasser.threadId]/runs.get(headers);
     io:println("Runs in Thread: ", res.data);
     test:assertNotEquals(res.data.length(), 0, msg = "No runs found in the thread");
 
@@ -138,7 +138,7 @@ isolated function testCreateThreadAndRun() returns error? {
     //     max_completion_tokens: 200
     // };
 
-    // RunObject resp = check openaiAssistant->/threads/runs.post(createThreadAndRunReq, headers);
+    // RunObject resp = check openAIAssistant->/threads/runs.post(createThreadAndRunReq, headers);
     // io:println("Created Thread and Run: ", resp);
     // test:assertNotEquals(resp.id, "", msg = "Thread and Run creation failed: No Run ID returned");
 
@@ -150,7 +150,7 @@ isolated function testCreateThread(DataPassingObject dataPasser) returns error? 
         messages: []
     };
 
-    ThreadObject response = check openaiAssistant->/threads.post(createThreadReq, headers);
+    ThreadObject response = check openAIAssistant->/threads.post(createThreadReq, headers);
     io:println("Thread ID: ", response.id);
     dataPasser.threadId = response.id;
     test:assertNotEquals(response.id, "");
@@ -163,7 +163,7 @@ isolated function testDeleteAssistant(DataPassingObject dataPasser) returns erro
         test:assertFail(msg = "No assistant ID available. Ensure assistant creation test runs first.");
     }
 
-    DeleteAssistantResponse res = check openaiAssistant->/assistants/[dataPasser.assistantId].delete(headers);
+    DeleteAssistantResponse res = check openAIAssistant->/assistants/[dataPasser.assistantId].delete(headers);
     io:println("Assistant deleted successfully: ", res);
     test:assertTrue(res.deleted == true, msg = "Failed to delete assistant");
 
@@ -175,7 +175,7 @@ isolated function testGetAssistant(DataPassingObject dataPasser) returns error? 
         test:assertFail(msg = "No assistant ID available. Ensure you set assistantId before running this test.");
     }
 
-    AssistantObject res = check openaiAssistant->/assistants/[dataPasser.assistantId].get(headers);
+    AssistantObject res = check openAIAssistant->/assistants/[dataPasser.assistantId].get(headers);
     io:println("Assistant Details: ", res);
     test:assertEquals(res.id, dataPasser.assistantId);
 
@@ -183,7 +183,7 @@ isolated function testGetAssistant(DataPassingObject dataPasser) returns error? 
 
 @test:Config {dataProvider: dataGen, dependsOn: [testCreateRun]}
 isolated function testListRunSteps(DataPassingObject dataPasser) returns error? {
-    ListRunStepsResponse res = check openaiAssistant->/threads/[dataPasser.threadId]/runs/[dataPasser.runId]/steps.get(headers);
+    ListRunStepsResponse res = check openAIAssistant->/threads/[dataPasser.threadId]/runs/[dataPasser.runId]/steps.get(headers);
     test:assertTrue(res is ListRunStepsResponse);
     io:println("Steps in Run: ", res.data);
     dataPasser.stepId = res.data.length() > 0 ? res.data[0].id : "";
@@ -204,7 +204,7 @@ isolated function testCreateAssistant(DataPassingObject dataPasser) returns erro
         tools: [codeTool]
     };
 
-    AssistantObject res = check openaiAssistant->/assistants.post(request, headers);
+    AssistantObject res = check openAIAssistant->/assistants.post(request, headers);
     io:println("Assistant ID: ", res.id);
     dataPasser.assistantId = res.id;
     test:assertNotEquals(res.id, "");
@@ -219,7 +219,7 @@ isolated function testListAssistants() returns error? {
         after: ""
     };
 
-    ListAssistantsResponse res = check openaiAssistant->/assistants.get(headers, query);
+    ListAssistantsResponse res = check openAIAssistant->/assistants.get(headers, query);
     io:println("Assistant List: ", res.data);
     test:assertTrue(res is ListAssistantsResponse);
 
@@ -231,7 +231,7 @@ isolated function testGetRunStep(DataPassingObject dataPasser) returns error? {
         test:assertEquals(dataPasser.stepId, "", msg = "No step ID available.");
     }
     else {
-        RunStepObject res = check openaiAssistant->/threads/[dataPasser.threadId]/runs/[dataPasser.runId]/steps/[dataPasser.stepId].get(headers);
+        RunStepObject res = check openAIAssistant->/threads/[dataPasser.threadId]/runs/[dataPasser.runId]/steps/[dataPasser.stepId].get(headers);
         io:println("Run Step Details: ", res);
         test:assertEquals(res.id, dataPasser.stepId, msg = "Retrieved step ID does not match the requested ID");
     }
@@ -244,7 +244,7 @@ isolated function testDeleteThread(DataPassingObject dataPasser) returns error? 
         test:assertFail(msg = "No thread ID available. Ensure thread creation test runs first.");
     }
 
-    DeleteThreadResponse res = check openaiAssistant->/threads/[dataPasser.threadId].delete(headers);
+    DeleteThreadResponse res = check openAIAssistant->/threads/[dataPasser.threadId].delete(headers);
     io:println("Thread deleted successfully: ", res);
     test:assertTrue(res.deleted == true, msg = "Failed to delete thread");
 }
@@ -255,7 +255,7 @@ isolated function testGetThread(DataPassingObject dataPasser) returns error? {
         test:assertFail(msg = "No thread ID available. Ensure testCreateThread runs first.");
     }
 
-    ThreadObject res = check openaiAssistant->/threads/[dataPasser.threadId].get(headers);
+    ThreadObject res = check openAIAssistant->/threads/[dataPasser.threadId].get(headers);
     io:println("Thread Details: ", res);
     test:assertEquals(res.id, dataPasser.threadId);
 
@@ -263,7 +263,7 @@ isolated function testGetThread(DataPassingObject dataPasser) returns error? {
 
 @test:Config {dataProvider: dataGen, dependsOn: [testCreateRun]}
 isolated function testGetRun(DataPassingObject dataPasser) returns error? {
-    RunObject res = check openaiAssistant->/threads/[dataPasser.threadId]/runs/[dataPasser.runId].get(headers);
+    RunObject res = check openAIAssistant->/threads/[dataPasser.threadId]/runs/[dataPasser.runId].get(headers);
     io:println("Run Details: ", res);
     test:assertEquals(res.id, dataPasser.runId, msg = "Retrieved run ID does not match the requested ID");
 

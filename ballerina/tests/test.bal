@@ -39,10 +39,12 @@ const map<string|string[]> headers = {
     "OpenAI-Beta": ["assistants=v2"]
 };
 
-@test:Config {dependsOn: [testCreateMessage, testCreateThread, testGetMessage]}
+@test:Config {
+    dependsOn: [testCreateMessage, testCreateThread, testGetMessage],
+    groups: ["live_tests", "mock_tests"]
+}
 function testDeleteMessage() returns error? {
-
-    if (threadId == "" || messageId == "") {
+    if threadId == "" || messageId == "" {
         test:assertFail(msg = "No thread ID or message ID available. Ensure message creation test runs first.");
     }
 
@@ -52,9 +54,12 @@ function testDeleteMessage() returns error? {
 
 }
 
-@test:Config {dependsOn: [testCreateThread, testCreateMessage]}
+@test:Config {
+    dependsOn: [testCreateThread, testCreateMessage],
+    groups: ["live_tests", "mock_tests"]
+}
 function testGetMessage() returns error? {
-    if (threadId == "" || messageId == "") {
+    if threadId == "" || messageId == "" {
         test:assertFail(msg = "No thread ID or message ID available. Ensure thread creation and message creation tests run first.");
     }
 
@@ -64,9 +69,12 @@ function testGetMessage() returns error? {
 
 }
 
-@test:Config {dependsOn: [testCreateThread]}
+@test:Config {
+    dependsOn: [testCreateThread],
+    groups: ["live_tests", "mock_tests"]
+}
 function testCreateMessage() returns error? {
-    if (threadId == "") {
+    if threadId == "" {
         test:assertFail(msg = "No thread ID available. Ensure testCreateThread runs first.");
     }
 
@@ -82,9 +90,12 @@ function testCreateMessage() returns error? {
 
 }
 
-@test:Config {dependsOn: [testCreateThread]}
+@test:Config {
+    dependsOn: [testCreateThread],
+    groups: ["live_tests", "mock_tests"]
+}
 function testListMessages() returns error? {
-    if (threadId == "") {
+    if threadId == "" {
         test:assertFail(msg = "No thread ID available. Ensure thread creation test runs first.");
     }
 
@@ -93,7 +104,10 @@ function testListMessages() returns error? {
     test:assertTrue(res is ListMessagesResponse);
 }
 
-@test:Config {dependsOn: [testCreateThread, testCreateAssistant]}
+@test:Config {
+    dependsOn: [testCreateThread, testCreateAssistant],
+    groups: ["live_tests", "mock_tests"]
+}
 function testCreateRun() returns error? {
     CreateRunRequest runReq = {
         assistant_id: assistantId,
@@ -111,7 +125,10 @@ function testCreateRun() returns error? {
     runId = resp.id;
 }
 
-@test:Config {dependsOn: [testCreateThread]}
+@test:Config {
+    dependsOn: [testCreateThread],
+    groups: ["live_tests", "mock_tests"]
+}
 function testListRuns() returns error? {
     ListRunsResponse res = check openAIAssistant->/threads/[threadId]/runs.get(headers);
     io:println("Runs in Thread: ", res.data);
@@ -119,7 +136,10 @@ function testListRuns() returns error? {
 
 }
 
-@test:Config {dependsOn: [testCreateAssistant]}
+@test:Config {
+    dependsOn: [testCreateAssistant],
+    groups: ["live_tests", "mock_tests"]
+}
 function testCreateThreadAndRun() returns error? {
     // CreateThreadAndRunRequest createThreadAndRunReq = {
     //     assistant_id: assistantId,
@@ -137,7 +157,9 @@ function testCreateThreadAndRun() returns error? {
 
 }
 
-@test:Config {}
+@test:Config {
+    groups: ["live_tests", "mock_tests"]
+}
 function testCreateThread() returns error? {
     CreateThreadRequest createThreadReq = {
         messages: []
@@ -150,7 +172,10 @@ function testCreateThread() returns error? {
 
 }
 
-@test:Config {dependsOn: [testCreateAssistant, testGetAssistant, testCreateRun, testGetRunStep, testGetRun, testListRunSteps]}
+@test:Config {
+    dependsOn: [testCreateAssistant, testGetAssistant, testCreateRun, testGetRunStep, testGetRun, testListRunSteps],
+    groups: ["live_tests", "mock_tests"]
+}
 function testDeleteAssistant() returns error? {
     if (assistantId == "") {
         test:assertFail(msg = "No assistant ID available. Ensure assistant creation test runs first.");
@@ -162,7 +187,10 @@ function testDeleteAssistant() returns error? {
 
 }
 
-@test:Config {dependsOn: [testCreateAssistant]}
+@test:Config {
+    dependsOn: [testCreateAssistant],
+    groups: ["live_tests", "mock_tests"]
+}
 function testGetAssistant() returns error? {
     if (assistantId == "") {
         test:assertFail(msg = "No assistant ID available. Ensure you set assistantId before running this test.");
@@ -174,7 +202,10 @@ function testGetAssistant() returns error? {
 
 }
 
-@test:Config {dependsOn: [testCreateRun]}
+@test:Config {
+    dependsOn: [testCreateRun],
+    groups: ["live_tests", "mock_tests"]
+}
 function testListRunSteps() returns error? {
     ListRunStepsResponse res = check openAIAssistant->/threads/[threadId]/runs/[runId]/steps.get(headers);
     test:assertTrue(res is ListRunStepsResponse);
@@ -182,7 +213,9 @@ function testListRunSteps() returns error? {
     stepId = res.data.length() > 0 ? res.data[0].id : "";
 }
 
-@test:Config {}
+@test:Config {
+    groups: ["live_tests", "mock_tests"]
+}
 function testCreateAssistant() returns error? {
     AssistantToolsCode codeTool = {
         'type: "code_interpreter"
@@ -203,7 +236,9 @@ function testCreateAssistant() returns error? {
 
 }
 
-@test:Config {}
+@test:Config {
+    groups: ["live_tests", "mock_tests"]
+}
 function testListAssistants() returns error? {
 
     ListAssistantsQueries query = {
@@ -217,7 +252,10 @@ function testListAssistants() returns error? {
 
 }
 
-@test:Config {dependsOn: [testCreateRun]}
+@test:Config {
+    dependsOn: [testCreateRun],
+    groups: ["live_tests", "mock_tests"]
+}
 function testGetRunStep() returns error? {
     if stepId == "" {
         test:assertEquals(stepId, "", msg = "No step ID available.");
@@ -230,9 +268,12 @@ function testGetRunStep() returns error? {
 
 }
 
-@test:Config {dependsOn: [testCreateThread, testCreateMessage, testDeleteMessage, testGetThread, testListMessages, testGetRunStep, testGetRun, testListRunSteps, testListRuns]}
+@test:Config {
+    dependsOn: [testCreateThread, testCreateMessage, testDeleteMessage, testGetThread, testListMessages, testGetRunStep, testGetRun, testListRunSteps, testListRuns],
+    groups: ["live_tests", "mock_tests"]
+}
 function testDeleteThread() returns error? {
-    if (threadId == "") {
+    if threadId == "" {
         test:assertFail(msg = "No thread ID available. Ensure thread creation test runs first.");
     }
 
@@ -241,9 +282,12 @@ function testDeleteThread() returns error? {
     test:assertTrue(res.deleted == true, msg = "Failed to delete thread");
 }
 
-@test:Config {dependsOn: [testCreateThread]}
+@test:Config {
+    dependsOn: [testCreateThread],
+    groups: ["live_tests", "mock_tests"]
+}
 function testGetThread() returns error? {
-    if (threadId == "") {
+    if threadId == "" {
         test:assertFail(msg = "No thread ID available. Ensure testCreateThread runs first.");
     }
 
@@ -253,7 +297,10 @@ function testGetThread() returns error? {
 
 }
 
-@test:Config {dependsOn: [testCreateRun]}
+@test:Config {
+    dependsOn: [testCreateRun],
+    groups: ["live_tests", "mock_tests"]
+}
 function testGetRun() returns error? {
     RunObject res = check openAIAssistant->/threads/[threadId]/runs/[runId].get(headers);
     io:println("Run Details: ", res);

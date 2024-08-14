@@ -192,7 +192,7 @@ function testCreateAssistant() returns error? {
         model: "gpt-3.5-turbo",
         name: "Math Tutor",
         description: "An Assistant for personal math tutoring",
-        instructions: "You are a personal math tutor. Help the user with their math questions."
+        instructions: "You are a personal math tutor. Help the user with their math questions.",
         tools: [codeTool]
     };
 

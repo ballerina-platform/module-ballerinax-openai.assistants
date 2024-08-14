@@ -51,7 +51,6 @@ function testDeleteMessage() returns error? {
     DeleteMessageResponse res = check openAIAssistant->/threads/[threadId]/messages/[messageId].delete(headers);
     io:println("Message deleted successfully: ", res);
     test:assertTrue(res.deleted == true, msg = "Failed to delete message");
-
 }
 
 @test:Config {
@@ -66,7 +65,6 @@ function testGetMessage() returns error? {
     MessageObject res = check openAIAssistant->/threads/[threadId]/messages/[messageId].get(headers);
     io:println("Message Details: ", res);
     test:assertEquals(res.id, messageId, msg = "Retrieved message ID does not match the requested ID");
-
 }
 
 @test:Config {
@@ -87,7 +85,6 @@ function testCreateMessage() returns error? {
     io:println("Created Message: ", res);
     test:assertNotEquals(res.id, "");
     messageId = res.id;
-
 }
 
 @test:Config {
@@ -133,7 +130,6 @@ function testListRuns() returns error? {
     ListRunsResponse res = check openAIAssistant->/threads/[threadId]/runs.get(headers);
     io:println("Runs in Thread: ", res.data);
     test:assertNotEquals(res.data.length(), 0, msg = "No runs found in the thread");
-
 }
 
 @test:Config {
@@ -154,7 +150,6 @@ function testCreateThreadAndRun() returns error? {
     // RunObject resp = check openAIAssistant->/threads/runs.post(createThreadAndRunReq, headers);
     // io:println("Created Thread and Run: ", resp);
     // test:assertNotEquals(resp.id, "", msg = "Thread and Run creation failed: No Run ID returned");
-
 }
 
 @test:Config {
@@ -169,7 +164,6 @@ function testCreateThread() returns error? {
     io:println("Thread ID: ", response.id);
     threadId = response.id;
     test:assertNotEquals(response.id, "");
-
 }
 
 @test:Config {
@@ -184,7 +178,6 @@ function testDeleteAssistant() returns error? {
     DeleteAssistantResponse res = check openAIAssistant->/assistants/[assistantId].delete(headers);
     io:println("Assistant deleted successfully: ", res);
     test:assertTrue(res.deleted == true, msg = "Failed to delete assistant");
-
 }
 
 @test:Config {
@@ -199,7 +192,6 @@ function testGetAssistant() returns error? {
     AssistantObject res = check openAIAssistant->/assistants/[assistantId].get(headers);
     io:println("Assistant Details: ", res);
     test:assertEquals(res.id, assistantId);
-
 }
 
 @test:Config {
@@ -233,7 +225,6 @@ function testCreateAssistant() returns error? {
     io:println("Assistant ID: ", res.id);
     assistantId = res.id;
     test:assertNotEquals(res.id, "");
-
 }
 
 @test:Config {
@@ -249,7 +240,6 @@ function testListAssistants() returns error? {
     ListAssistantsResponse res = check openAIAssistant->/assistants.get(headers, query);
     io:println("Assistant List: ", res.data);
     test:assertTrue(res is ListAssistantsResponse);
-
 }
 
 @test:Config {
@@ -265,7 +255,6 @@ function testGetRunStep() returns error? {
         io:println("Run Step Details: ", res);
         test:assertEquals(res.id, stepId, msg = "Retrieved step ID does not match the requested ID");
     }
-
 }
 
 @test:Config {
@@ -294,7 +283,6 @@ function testGetThread() returns error? {
     ThreadObject res = check openAIAssistant->/threads/[threadId].get(headers);
     io:println("Thread Details: ", res);
     test:assertEquals(res.id, threadId);
-
 }
 
 @test:Config {
@@ -305,5 +293,4 @@ function testGetRun() returns error? {
     RunObject res = check openAIAssistant->/threads/[threadId]/runs/[runId].get(headers);
     io:println("Run Details: ", res);
     test:assertEquals(res.id, runId, msg = "Retrieved run ID does not match the requested ID");
-
 }

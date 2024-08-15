@@ -6,7 +6,7 @@ This example demonstrates how the OpenAI Assistants API `OpenAI-Beta: assistants
 
 ### 1. Generate an API key
 
-Refer to the [Setup guide](https://central.ballerina.io/ballerinax/openai.finetunes/latest#setup-guide) to obtain the API key.
+Refer to the [Setup guide](https://central.ballerina.io/ballerinax/openai.assistants/latest#setup-guide) to obtain the API key.
 
 ### 2. Configuration
 

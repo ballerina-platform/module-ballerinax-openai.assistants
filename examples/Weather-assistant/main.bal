@@ -215,7 +215,6 @@ public function waitUntilRunCompletes(assistants:Client openaiAssistant, string 
     while (waitedTime < maxWaitTimeSeconds) {
         // Get the current status of the run
         assistants:RunObject run = check openaiAssistant->/threads/[threadId]/runs/[runId].get(headers);
-
         io:println("Current run status: ", run.status);
 
         // Check if the run status is in the stopping statuses
@@ -232,6 +231,5 @@ public function waitUntilRunCompletes(assistants:Client openaiAssistant, string 
         runtime:sleep(pollInterval);
         waitedTime += pollInterval;
     }
-
     return;
 }

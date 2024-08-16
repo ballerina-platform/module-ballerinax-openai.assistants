@@ -60,7 +60,7 @@ Then, run the following command to execute the tests:
 Create a `Config.toml` file in the `tests` directory and add your authentication credentials:
 
 ```toml
-isLiveServer = true
+IS_LIVE_SERVER = true
 OPENAI_API_KEY = "<your-openAI-api-key>"
 ```
 
@@ -71,14 +71,14 @@ Alternatively, you can set your authentication credentials as environment variab
 For Linux or macOS:
 
 ```bash
-export isLiveServer=true
+export IS_LIVE_SERVER=true
 export OPENAI_API_KEY="<your-openAI-api-key>"
 ```
 
 For Windows:
 
 ```bash
-setx isLiveServer true
+setx IS_LIVE_SERVER true
 setx OPENAI_API_KEY <your-openAI-api-key>
 ```
 

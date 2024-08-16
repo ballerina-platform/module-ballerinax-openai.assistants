@@ -980,7 +980,7 @@ http:Service mockService = service object {
 };
 
 function init() returns error? {
-    if isLiveServer {
+    if IS_LIVE_SERVER {
         log:printInfo("Skipping mock server initialization as the tests are running on live server");
         return;
     }

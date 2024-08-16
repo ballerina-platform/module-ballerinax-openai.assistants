@@ -60,7 +60,7 @@ Then, run the following command to execute the tests:
 Create a `Config.toml` file in the `tests` directory and add your authentication credentials:
 
 ```toml
-isLiveSerer = true
+isLiveServer = true
 token = "<your-openAI-api-key>"
 ```
 

@@ -38,13 +38,13 @@ Alternatively, you can set the environment variable directly.
 For Linux or macOS:
 
 ```bash
-export isLiveServer=false
+export IS_LIVE_SERVER=false
 ```
 
 For Windows:
 
 ```bash
-setx isLiveServer false
+setx IS_LIVE_SERVER false
 ```
 
 Then, run the following command to execute the tests:
@@ -60,8 +60,8 @@ Then, run the following command to execute the tests:
 Create a `Config.toml` file in the `tests` directory and add your authentication credentials:
 
 ```toml
-IS_LIVE_SERVER = true
-OPENAI_API_KEY = "<your-openAI-api-key>"
+isLiveSerer = true
+token = "<your-openAI-api-key>"
 ```
 
 ### Using Environment Variables

@@ -18,13 +18,13 @@ import ballerina/io;
 import ballerina/os;
 import ballerina/test;
 
-configurable boolean IS_LIVE_SERVER = os:getEnv("IS_LIVE_SERVER") == "true";
-configurable string OPENAI_API_KEY = IS_LIVE_SERVER ? os:getEnv("OPENAI_API_KEY") : "test";
-configurable string serviceUrl = IS_LIVE_SERVER ? "https://api.openai.com/v1" : "http://localhost:9090";
+configurable boolean isLiveServer = os:getEnv("IS_LIVE_SERVER") == "true";
+configurable string token = isLiveServer ? os:getEnv("OPENAI_API_KEY") : "test";
+configurable string serviceUrl = isLiveServer ? "https://api.openai.com/v1" : "http://localhost:9090";
 
 ConnectionConfig config = {
     auth: {
-        token: OPENAI_API_KEY
+        token: token
     }
 };
 final Client openAIAssistant = check new (config, serviceUrl);

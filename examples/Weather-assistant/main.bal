@@ -175,24 +175,24 @@ public function main() returns error? {
     // Step 5: Retrieve and display the response from the assistant
     assistants:ListMessagesResponse messages = check openaiAssistant->/threads/[threadId]/messages.get(headers);
 
-    if (messages.data.length() > 0) {
+    if messages.data.length() > 0 {
         // Find the assistant's response in the thread
         (assistants:MessageContentImageFileObject|assistants:MessageContentImageUrlObject|assistants:MessageContentTextObject)[] assistantResponse = [];
         foreach assistants:MessageObject threadMessage in messages.data {
-            if (threadMessage.role == "assistant") {
+            if threadMessage.role == "assistant" {
                 assistantResponse = threadMessage.content;
                 break;
             }
         }
 
         foreach (assistants:MessageContentImageFileObject|assistants:MessageContentImageUrlObject|assistants:MessageContentTextObject) responseObject in assistantResponse {
-            if (responseObject is assistants:MessageContentImageFileObject) {
+            if responseObject is assistants:MessageContentImageFileObject {
                 io:println("Image File ID: ", responseObject.image_file.file_id);
 
-            } else if (responseObject is assistants:MessageContentTextObject) {
+            } else if responseObject is assistants:MessageContentTextObject {
                 io:println("Text Response: ", responseObject.text.value);
 
-            } else if (responseObject is assistants:MessageContentImageUrlObject) {
+            } else if responseObject is assistants:MessageContentImageUrlObject {
                 io:println("Image URL: ", responseObject.image_url);
             }
         }

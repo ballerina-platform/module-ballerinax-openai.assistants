@@ -19,7 +19,7 @@ import ballerina/os;
 import ballerina/test;
 
 configurable boolean isLiveServer = os:getEnv("isLiveServer") == "true";
-configurable string token = ?;
+configurable string token = isLiveServer ? os:getEnv("OPENAI_API_KEY"): "test";
 configurable string serviceUrl = isLiveServer ? "https://api.openai.com/v1" : "http://localhost:9090";
 
 ConnectionConfig config = {

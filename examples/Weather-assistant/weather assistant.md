@@ -1,4 +1,4 @@
-## Weather Assistant
+## Weather assistant
 
 This example demonstrates how the OpenAI Assistants API `OpenAI-Beta: assistants=v2` can be used to create a Weather Assistant capable of providing weather information such as temperature and rain probability. The example covers the complete workflow: creating the assistant, defining the functions for retrieving temperature and rain probability, starting a conversation, sending a weather-related query, initiating a run to process the query, and finally handling the assistant's function calls. The approach ensures that the assistant responds with accurate weather details, making it suitable for real-time weather inquiries and forecasting scenarios.
 

@@ -188,10 +188,8 @@ public function main() returns error? {
         foreach (assistants:MessageContentImageFileObject|assistants:MessageContentImageUrlObject|assistants:MessageContentTextObject) responseObject in assistantResponse {
             if responseObject is assistants:MessageContentImageFileObject {
                 io:println("Image File ID: ", responseObject.image_file.file_id);
-
             } else if responseObject is assistants:MessageContentTextObject {
                 io:println("Text Response: ", responseObject.text.value);
-
             } else if responseObject is assistants:MessageContentImageUrlObject {
                 io:println("Image URL: ", responseObject.image_url);
             }

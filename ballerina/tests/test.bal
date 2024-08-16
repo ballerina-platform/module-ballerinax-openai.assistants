@@ -24,7 +24,7 @@ configurable string serviceUrl = isLiveServer ? "https://api.openai.com/v1" : "h
 
 ConnectionConfig config = {
     auth: {
-        token: token
+        token
     }
 };
 final Client openAIAssistant = check new (config, serviceUrl);

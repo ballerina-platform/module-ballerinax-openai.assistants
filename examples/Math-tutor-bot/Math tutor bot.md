@@ -1,4 +1,4 @@
-## Math Tutor Bot
+## Math tutor bot
 This use case demonstrates how the OpenAI Assistants API `OpenAI-Beta: assistants=v2` can be utilized to create a Math Tutor Bot using Ballerina. The example showcases a series of steps that involve creating an assistant designed to help users with mathematical problems. This includes defining functions for solving and explaining math problems, starting a conversation, sending a math problem as a message, initiating a run to process the problem, and retrieving the assistant's step-by-step response. The example highlights the integration of function calls and real-time interaction to provide accurate and detailed solutions for various mathematical queries.
 
 ## Prerequisites

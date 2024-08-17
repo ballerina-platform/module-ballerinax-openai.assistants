@@ -2,7 +2,7 @@
 distribution = "2201.9.3"
 org = "ballerinax"
 name = "openai.assistants"
-version = "1.0.0"
+version = "@toml.version@"
 license = ["Apache-2.0"]
 authors = ["Ballerina"]
 keywords = ["AI/assitants", "vendor/OpenAI", "cost/paid", "custom-bot","run", "threads"] 

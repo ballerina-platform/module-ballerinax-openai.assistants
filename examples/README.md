@@ -2,13 +2,19 @@
 
 The `ballerinax/openai.assistants` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-openai.assistants/tree/main/examples), covering use cases like cache management, session management, and rate limiting.
 
-[//]: # (TODO: Add examples)
-1. 
-2. 
+1. [Math Tutor Bot](https://github.com/ballerina-platform/module-ballerinax-openai.assistants/tree/main/examples/Math-tutor-bot) - Create an assistant to solve mathematical problems with step-by-step solutions and interactive guidance.
+
+2. [Weather Assistant](https://github.com/ballerina-platform/module-ballerinax-openai.assistants/tree/main/examples/Weather-assistant) - Develop an assistant to provide weather information by leveraging function calls for temperature and rain probability.
 
 ## Prerequisites
 
-[//]: # (TODO: Add prerequisites)
+1. Generate an API key as described in the [Setup guide](https://central.ballerina.io/ballerinax/openai.finetunes/latest#setup-guide).
+
+2. For each example, create a `Config.toml` file the related configuration. Here's an example of how your `Config.toml` file should look:
+
+    ```toml
+    token = "<API Key>"
+    ```
 
 ## Running an Example
 

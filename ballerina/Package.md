@@ -97,7 +97,7 @@ bal run
 
 ## Examples
 
-The `OpenAI Assistants` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/module-ballerinax-openai-assistants/tree/main/examples/), covering the following use cases:
+The `OpenAI Assistants` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-openai.assistants/tree/main/examples), covering the following use cases:
 
 1. [Math tutor bot](https://github.com/ballerina-platform/module-ballerinax-openai.assistants/tree/main/examples/Math-tutor-bot) - Create an assistant to solve mathematical problems with step-by-step solutions and interactive guidance.
 

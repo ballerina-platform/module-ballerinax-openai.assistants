@@ -2,9 +2,9 @@
 
 The `ballerinax/openai.assistants` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-openai.assistants/tree/main/examples), covering use cases like cache management, session management, and rate limiting.
 
-1. [Math Tutor Bot](https://github.com/ballerina-platform/module-ballerinax-openai.assistants/tree/main/examples/Math-tutor-bot) - Create an assistant to solve mathematical problems with step-by-step solutions and interactive guidance.
+1. [Math Tutor Bot](https://github.com/ballerina-platform/module-ballerinax-openai.assistants/tree/main/examples/math-tutor-bot) - Create an assistant to solve mathematical problems with step-by-step solutions and interactive guidance.
 
-2. [Weather Assistant](https://github.com/ballerina-platform/module-ballerinax-openai.assistants/tree/main/examples/Weather-assistant) - Develop an assistant to provide weather information by leveraging function calls for temperature and rain probability.
+2. [Weather Assistant](https://github.com/ballerina-platform/module-ballerinax-openai.assistants/tree/main/examples/weather-assistant) - Develop an assistant to provide weather information by leveraging function calls for temperature and rain probability.
 
 ## Prerequisites
 

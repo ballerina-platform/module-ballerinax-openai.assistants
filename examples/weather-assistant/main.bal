@@ -20,18 +20,17 @@ import ballerinax/openai.assistants;
 
 configurable string token = ?;
 
-// Define the client to interact with the OpenAI Assistants API
-final assistants:Client openaiAssistant = check new ({
-    auth: {
-        token
-    }
-});
-
 final map<string|string[]> headers = {
     "OpenAI-Beta": ["assistants=v2"]
 };
 
 public function main() returns error? {
+    // Define the client to interact with the OpenAI Assistants API
+    final assistants:Client openaiAssistant = check new ({
+        auth: {
+            token
+        }
+    });
     // Step 1: Create the weather assistant
     assistants:FunctionObject getTemperature = {
         name: "get_temperature",

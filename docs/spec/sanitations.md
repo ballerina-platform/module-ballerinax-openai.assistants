@@ -17,7 +17,7 @@ This document records the sanitation done on top of the official OpenAPI specifi
    - **Updated**:
       - Removed the `default` parameter 
 
-   - **Reason**: This change is done as a workaround for ballerina openapi tool not allowing to generate the client.
+   - **Reason**: This change is done as a temperary workaround until the Ballerina OpenAPI tool supports OpenAPI Specification version v3.1.x(Currently supported upto version 3.0.0)
 
 2. **Removed the `status`, `incomplete_objects`, `completed_at`, `attachments` and `incomplete_at` attributes from the required fields of `MessageObject` schema**:
 

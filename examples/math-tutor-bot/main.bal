@@ -26,6 +26,7 @@ final map<string|string[]> headers = {
 };
 
 public function main() returns error? {
+    // Define the client to interact with the OpenAI Assistants API
     final assistants:Client openaiAssistant = check new ({
         auth: {
             token

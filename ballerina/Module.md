@@ -9,25 +9,20 @@ The `ballarinax/openai.assistants` connector allows developers to seamlessly int
 
 To use the OpenAI Connector, you must have access to the OpenAI API through a [OpenAI Platform account](https://platform.openai.com) and a project under it. If you do not have a OpenAI Platform account, you can sign up for one [here](https://platform.openai.com/signup).
 
-#### Create a OpenAI API Key
-
 1. Open the [OpenAI Platform Dashboard](https://platform.openai.com).
 
-
 2. Navigate to Dashboard -> API keys
-<img src=https://github.com/user-attachments/assets/b2e09c6d-c15f-4cfa-a596-6328b1383162 alt="OpenAI Platform" style="width: 70%;">
-
+<img src=https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-openai.assistants/main/docs/setup/resources/navigate-api-key-dashboard.png alt="OpenAI Platform" style="width: 70%;">
 
 3. Click on the "Create new secret key" button
-<img src=https://github.com/user-attachments/assets/bf1adab4-5e3f-4094-9a56-5b4c3cc3c19e alt="OpenAI Platform" style="width: 70%;">
-
+<img src=https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-openai.assistants/main/docs/setup/resources/api-key-dashboard.png alt="OpenAI Platform" style="width: 70%;">
 
 4. Fill the details and click on Create secret key
-<img src=https://github.com/user-attachments/assets/1c565923-e968-4d5f-9864-7ed2022b8079 alt="OpenAI Platform" style="width: 70%;">
-
+<img src=https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-openai.assistants/main/docs/setup/resources/create-new-secret-key.png alt="OpenAI Platform" style="width: 70%;">
 
 5. Store the API key securely to use in your application 
-<img src=https://github.com/user-attachments/assets/bbbf8f38-d551-40ee-9664-f4cf2bd98997 alt="OpenAI Platform" style="width: 70%;">
+<img src=https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-openai.assistants/main/docs/setup/resources/saved-key.png alt="OpenAI Platform" style="width: 70%;">
+
 
 ## Quickstart
 

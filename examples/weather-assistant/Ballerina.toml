@@ -2,7 +2,7 @@
 org = "sanduni"
 name = "weather_bot"
 version = "0.1.0"
-distribution = "2201.9.2"
+distribution = "2201.9.3"
 
 [build-options]
 observabilityIncluded = true
@@ -10,5 +10,5 @@ observabilityIncluded = true
 [[dependency]]
 org = "ballerinax"
 name = "openai.assistants"
-version = "0.1.0"
+version = "1.0.0"
 repository = "local"

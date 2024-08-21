@@ -21,10 +21,6 @@ import ballerinax/openai.assistants;
 // Define configuration and client setup
 configurable string token = ?;
 
-final map<string|string[]> headers = {
-    "OpenAI-Beta": ["assistants=v2"]
-};
-
 public function main() returns error? {
     // Define the client to interact with the OpenAI Assistants API
     final assistants:Client openaiAssistant = check new ({
@@ -45,7 +41,11 @@ public function main() returns error? {
         tools: [codeTool]
     };
 
-    assistants:AssistantObject assistant = check openaiAssistant->/assistants.post(request, headers);
+    assistants:CreateAssistantHeaders assistantHeaders = {
+        OpenAI\-Beta: "assistants=v2"
+    };
+
+    assistants:AssistantObject assistant = check openaiAssistant->/assistants.post(assistantHeaders,request);
     io:println("Assistant ID: ", assistant.id);
 
     // Step 2: Create a new conversation thread
@@ -53,7 +53,11 @@ public function main() returns error? {
         messages: []
     };
 
-    assistants:ThreadObject thread = check openaiAssistant->/threads.post(threadRequest, headers);
+    assistants:CreateThreadHeaders threadHeaders = {
+        OpenAI\-Beta: "assistants=v2"
+    };
+
+    assistants:ThreadObject thread = check openaiAssistant->/threads.post( threadHeaders,threadRequest);
     io:println("Thread ID: ", thread.id);
 
     // Step 3: Create a message from the user asking for help with a math problem
@@ -62,7 +66,11 @@ public function main() returns error? {
         content: "Can you help me solve this equation: 2x + 3 = 7?"
     };
 
-    assistants:MessageObject message = check openaiAssistant->/threads/[thread.id]/messages.post(createMsgReq, headers);
+    assistants:CreateMessageHeaders createMessageHeaders = {
+        OpenAI\-Beta: "assistants=v2"
+    };
+
+    assistants:MessageObject message = check openaiAssistant->/threads/[thread.id]/messages.post(createMessageHeaders,createMsgReq);
     io:println("User's Message ID: ", message.id);
 
     // Step 4: Start a run with the math assistant to respond to the query
@@ -75,7 +83,11 @@ public function main() returns error? {
         max_completion_tokens: 200
     };
 
-    assistants:RunObject run = check openaiAssistant->/threads/[thread.id]/runs.post(runReq, headers);
+    assistants:CreateRunHeaders createRunHeaders = {
+        OpenAI\-Beta: "assistants=v2"
+    };
+
+    assistants:RunObject run = check openaiAssistant->/threads/[thread.id]/runs.post(createRunHeaders,runReq);
     io:println("Run ID: ", run.id);
 
     // Step 5: Wait for a while to allow the assistant to process the request
@@ -85,7 +97,10 @@ public function main() returns error? {
     check waitUntilRunCompletes(openaiAssistant, thread.id, run.id, waitTime);
 
     // Step 6: Retrieve and display the response from the assistant
-    assistants:ListMessagesResponse messages = check openaiAssistant->/threads/[thread.id]/messages.get(headers);
+    assistants:ListMessagesHeaders listMessageHeaders = {
+        OpenAI\-Beta: "assistants=v2"
+    };
+    assistants:ListMessagesResponse messages = check openaiAssistant->/threads/[thread.id]/messages.get(listMessageHeaders);
 
     if messages.data.length() > 0 {
         // Find the assistant's response in the thread
@@ -111,10 +126,17 @@ public function main() returns error? {
     }
 
     // Step 7: Clean up by deleting the assistant and thread
-    assistants:DeleteAssistantResponse delAssistant = check openaiAssistant->/assistants/[assistant.id].delete(headers);
+    assistants:DeleteAssistantHeaders delAssistantHeaders = {
+        OpenAI\-Beta: "assistants=v2"
+    };
+    assistants:DeleteAssistantResponse delAssistant = check openaiAssistant->/assistants/[assistant.id].delete(delAssistantHeaders);
     io:println("Deleted Assistant: ", delAssistant.deleted);
 
-    assistants:DeleteThreadResponse delThread = check openaiAssistant->/threads/[thread.id].delete(headers);
+    assistants:DeleteThreadHeaders delThreadHeaders = {
+        OpenAI\-Beta: "assistants=v2"
+    };
+
+    assistants:DeleteThreadResponse delThread = check openaiAssistant->/threads/[thread.id].delete(delThreadHeaders);
     io:println("Deleted Thread: ", delThread.deleted);
 }
 
@@ -137,6 +159,9 @@ public function waitUntilRunCompletes(assistants:Client openaiAssistant, string 
         "failed",
         "expired"
     ];
+    assistants:GetRunHeaders headers = {
+        OpenAI\-Beta: "assistants=v2"
+    };
 
     while (waitedTime < maxWaitTimeSeconds) {
         // Get the current status of the run

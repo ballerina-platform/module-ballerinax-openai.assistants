@@ -2807,6 +2807,7 @@ paths:
                 - Assistants
             summary: Returns a list of assistants.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - name: limit
                   in: query
                   description: &pagination_limit_param_description |
@@ -2937,6 +2938,8 @@ paths:
             tags:
                 - Assistants
             summary: Create an assistant with a model and instructions.
+            parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
             requestBody:
                 required: true
                 content:
@@ -3098,6 +3101,7 @@ paths:
                 - Assistants
             summary: Retrieves an assistant.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - in: path
                   name: assistant_id
                   required: true
@@ -3168,6 +3172,7 @@ paths:
                 - Assistants
             summary: Modifies an assistant.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - in: path
                   name: assistant_id
                   required: true
@@ -3268,6 +3273,7 @@ paths:
                 - Assistants
             summary: Delete an assistant.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - in: path
                   name: assistant_id
                   required: true
@@ -3324,6 +3330,8 @@ paths:
             tags:
                 - Assistants
             summary: Create a thread.
+            parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
             requestBody:
                 content:
                     application/json:
@@ -3449,6 +3457,7 @@ paths:
                 - Assistants
             summary: Retrieves a thread.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - in: path
                   name: thread_id
                   required: true
@@ -3512,6 +3521,7 @@ paths:
                 - Assistants
             summary: Modifies a thread.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - in: path
                   name: thread_id
                   required: true
@@ -3595,6 +3605,7 @@ paths:
                 - Assistants
             summary: Delete a thread.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - in: path
                   name: thread_id
                   required: true
@@ -3652,6 +3663,7 @@ paths:
                 - Assistants
             summary: Returns a list of messages for a given thread.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - in: path
                   name: thread_id
                   required: true
@@ -3782,6 +3794,7 @@ paths:
                 - Assistants
             summary: Create a message.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - in: path
                   name: thread_id
                   required: true
@@ -3871,6 +3884,7 @@ paths:
                 - Assistants
             summary: Retrieve a message.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - in: path
                   name: thread_id
                   required: true
@@ -3953,6 +3967,7 @@ paths:
                 - Assistants
             summary: Modifies a message.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - in: path
                   name: thread_id
                   required: true
@@ -4055,6 +4070,7 @@ paths:
                 - Assistants
             summary: Deletes a message.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - in: path
                   name: thread_id
                   required: true
@@ -4121,6 +4137,8 @@ paths:
             tags:
                 - Assistants
             summary: Create a thread and run it in one request.
+            parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
             requestBody:
                 required: true
                 content:
@@ -4495,6 +4513,7 @@ paths:
                 - Assistants
             summary: Returns a list of runs belonging to a thread.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - name: thread_id
                   in: path
                   required: true
@@ -4676,6 +4695,7 @@ paths:
                 - Assistants
             summary: Create a run.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - in: path
                   name: thread_id
                   required: true
@@ -5019,6 +5039,7 @@ paths:
                 - Assistants
             summary: Retrieves a run.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - in: path
                   name: thread_id
                   required: true
@@ -5120,6 +5141,7 @@ paths:
                 - Assistants
             summary: Modifies a run.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - in: path
                   name: thread_id
                   required: true
@@ -5252,6 +5274,7 @@ paths:
             summary: |
                 When a run has the `status: "requires_action"` and `required_action.type` is `submit_tool_outputs`, this endpoint can be used to submit the outputs from the tool calls once they're all completed. All outputs must be submitted in a single request.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - in: path
                   name: thread_id
                   required: true
@@ -5508,6 +5531,7 @@ paths:
                 - Assistants
             summary: Cancels a run that is `in_progress`.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - in: path
                   name: thread_id
                   required: true
@@ -5606,6 +5630,7 @@ paths:
                 - Assistants
             summary: Returns a list of run steps belonging to a run.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - name: thread_id
                   in: path
                   required: true
@@ -5727,6 +5752,7 @@ paths:
                 - Assistants
             summary: Retrieves a run step.
             parameters:
+                - $ref: '#/components/parameters/OpenAI-Beta-Header'
                 - in: path
                   name: thread_id
                   required: true
@@ -7228,6 +7254,15 @@ paths:
                         }
 
 components:
+    parameters:
+        OpenAI-Beta-Header:
+            name: OpenAI-Beta
+            in: header
+            required: true
+            schema:
+                type: string
+            example: "assistants=v2"
+
     securitySchemes:
         ApiKeyAuth:
             type: http

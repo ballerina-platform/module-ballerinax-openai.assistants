@@ -34,6 +34,10 @@ string messageId = "";
 string runId = "";
 string stepId = "";
 
+const record {string OpenAI\-Beta;} headers = {
+    OpenAI\-Beta: "assistants=v2"
+};
+
 @test:Config {
     dependsOn: [testCreateMessage, testCreateThread, testGetMessage],
     groups: ["live_tests", "mock_tests"]
@@ -42,10 +46,6 @@ function testDeleteMessage() returns error? {
     if threadId == "" || messageId == "" {
         test:assertFail(msg = "No thread ID or message ID available. Ensure message creation test runs first.");
     }
-
-    DeleteMessageHeaders headers = {
-        OpenAI\-Beta: "assistants=v2"
-    };
 
     DeleteMessageResponse res = check openAIAssistant->/threads/[threadId]/messages/[messageId].delete(headers);
     test:assertTrue(res.deleted == true, msg = "Failed to delete message");
@@ -59,10 +59,6 @@ function testGetMessage() returns error? {
     if threadId == "" || messageId == "" {
         test:assertFail(msg = "No thread ID or message ID available. Ensure thread creation and message creation tests run first.");
     }
-
-    GetMessageHeaders headers = {
-        OpenAI\-Beta: "assistants=v2"
-    };
 
     MessageObject res = check openAIAssistant->/threads/[threadId]/messages/[messageId].get(headers);
     test:assertEquals(res.id, messageId, msg = "Retrieved message ID does not match the requested ID");
@@ -82,10 +78,6 @@ function testCreateMessage() returns error? {
         content: "Can you help me solve the equation `3x + 11 = 14`?"
     };
 
-    CreateMessageHeaders headers = {
-        OpenAI\-Beta: "assistants=v2"
-    };
-
     MessageObject res = check openAIAssistant->/threads/[threadId]/messages.post(headers, createMsgReq);
     test:assertNotEquals(res.id, "");
     messageId = res.id;
@@ -99,10 +91,6 @@ function testListMessages() returns error? {
     if threadId == "" {
         test:assertFail(msg = "No thread ID available. Ensure thread creation test runs first.");
     }
-
-    ListMessagesHeaders headers = {
-        OpenAI\-Beta: "assistants=v2"
-    };
 
     ListMessagesResponse res = check openAIAssistant->/threads/[threadId]/messages.get(headers);
     test:assertTrue(res is ListMessagesResponse);
@@ -123,10 +111,6 @@ function testCreateRun() returns error? {
         max_completion_tokens: 200
     };
 
-    CreateRunHeaders headers = {
-        OpenAI\-Beta: "assistants=v2"
-    };
-
     RunObject resp = check openAIAssistant->/threads/[threadId]/runs.post(headers, runReq);
     test:assertNotEquals(resp.id, "", msg = "Run creation failed: No Run ID returned");
     runId = resp.id;
@@ -137,10 +121,6 @@ function testCreateRun() returns error? {
     groups: ["live_tests", "mock_tests"]
 }
 function testListRuns() returns error? {
-    ListRunsHeaders headers = {
-        OpenAI\-Beta: "assistants=v2"
-    };
-
     ListRunsResponse res = check openAIAssistant->/threads/[threadId]/runs.get(headers);
     test:assertNotEquals(res.data.length(), 0, msg = "No runs found in the thread");
 }
@@ -160,10 +140,6 @@ function testCreateThreadAndRun() returns error? {
     //     max_completion_tokens: 200
     // };
 
-    // CreateThreadAndRunHeaders headers = {
-    //     OpenAI\-Beta: "assistants=v2"
-    // };
-
     // RunObject resp = check openAIAssistant->/threads/runs.post(headers,createThreadAndRunReq);
     // test:assertNotEquals(resp.id, "", msg = "Thread and Run creation failed: No Run ID returned");
 }
@@ -174,10 +150,6 @@ function testCreateThreadAndRun() returns error? {
 function testCreateThread() returns error? {
     CreateThreadRequest createThreadReq = {
         messages: []
-    };
-
-    CreateThreadHeaders headers = {
-        OpenAI\-Beta: "assistants=v2"
     };
 
     ThreadObject response = check openAIAssistant->/threads.post(headers, createThreadReq);
@@ -194,10 +166,6 @@ function testDeleteAssistant() returns error? {
         test:assertFail(msg = "No assistant ID available. Ensure assistant creation test runs first.");
     }
 
-    DeleteAssistantHeaders headers = {
-        OpenAI\-Beta: "assistants=v2"
-    };
-
     DeleteAssistantResponse res = check openAIAssistant->/assistants/[assistantId].delete(headers);
     test:assertTrue(res.deleted == true, msg = "Failed to delete assistant");
 }
@@ -211,10 +179,6 @@ function testGetAssistant() returns error? {
         test:assertFail(msg = "No assistant ID available. Ensure you set assistantId before running this test.");
     }
 
-    GetAssistantHeaders headers = {
-        OpenAI\-Beta: "assistants=v2"
-    };
-
     AssistantObject res = check openAIAssistant->/assistants/[assistantId].get(headers);
     test:assertEquals(res.id, assistantId);
 }
@@ -224,10 +188,6 @@ function testGetAssistant() returns error? {
     groups: ["live_tests", "mock_tests"]
 }
 function testListRunSteps() returns error? {
-    ListRunStepsHeaders headers = {
-        OpenAI\-Beta: "assistants=v2"
-    };
-
     ListRunStepsResponse res = check openAIAssistant->/threads/[threadId]/runs/[runId]/steps.get(headers);
     test:assertTrue(res is ListRunStepsResponse);
     stepId = res.data.length() > 0 ? res.data[0].id : "";
@@ -249,10 +209,6 @@ function testCreateAssistant() returns error? {
         tools: [codeTool]
     };
 
-    CreateAssistantHeaders headers = {
-        OpenAI\-Beta: "assistants=v2"
-    };
-
     AssistantObject res = check openAIAssistant->/assistants.post(headers, createAssistantReq);
     assistantId = res.id;
     test:assertNotEquals(res.id, "");
@@ -267,9 +223,6 @@ function testListAssistants() returns error? {
         before: "",
         after: ""
     };
-    ListAssistantsHeaders headers = {
-        OpenAI\-Beta: "assistants=v2"
-    };
 
     ListAssistantsResponse res = check openAIAssistant->/assistants.get(headers, query);
     test:assertTrue(res is ListAssistantsResponse);
@@ -280,9 +233,6 @@ function testListAssistants() returns error? {
     groups: ["live_tests", "mock_tests"]
 }
 function testGetRunStep() returns error? {
-    GetRunStepHeaders headers = {
-        OpenAI\-Beta: "assistants=v2"
-    };
 
     if stepId == "" {
         test:assertEquals(stepId, "", msg = "No step ID available.");
@@ -302,10 +252,6 @@ function testDeleteThread() returns error? {
         test:assertFail(msg = "No thread ID available. Ensure thread creation test runs first.");
     }
 
-    DeleteThreadHeaders headers = {
-        OpenAI\-Beta: "assistants=v2"
-    };
-
     DeleteThreadResponse res = check openAIAssistant->/threads/[threadId].delete(headers);
     test:assertTrue(res.deleted == true, msg = "Failed to delete thread");
 }
@@ -318,9 +264,6 @@ function testGetThread() returns error? {
     if threadId == "" {
         test:assertFail(msg = "No thread ID available. Ensure testCreateThread runs first.");
     }
-    GetThreadHeaders headers = {
-        OpenAI\-Beta: "assistants=v2"
-    };
 
     ThreadObject res = check openAIAssistant->/threads/[threadId].get(headers);
     test:assertEquals(res.id, threadId);
@@ -331,10 +274,6 @@ function testGetThread() returns error? {
     groups: ["live_tests", "mock_tests"]
 }
 function testGetRun() returns error? {
-    GetRunHeaders headers = {
-        OpenAI\-Beta: "assistants=v2"
-    };
-    
     RunObject res = check openAIAssistant->/threads/[threadId]/runs/[runId].get(headers);
     test:assertEquals(res.id, runId, msg = "Retrieved run ID does not match the requested ID");
 }

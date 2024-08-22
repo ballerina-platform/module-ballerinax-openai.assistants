@@ -59,10 +59,6 @@ public type OkThreadObject record {|
     map<string|string[]> headers;
 |};
 
-final map<string|string[]> headers = {
-    "OpenAI-Beta": ["assistants=v2"]
-};
-
 http:Service mockService = service object {
     # Delete an assistant.
     #

@@ -215,3 +215,20 @@ isolated function getPathForQueryParam(map<anydata> queryParam, map<Encoding> en
     string restOfPath = string:'join("", ...param);
     return restOfPath;
 }
+
+# Generate header map for given header values.
+#
+# + headerParam - Headers  map
+# + return - Returns generated map or error at failure of client initialization
+isolated function getMapForHeaders(map<anydata> headerParam) returns map<string|string[]> {
+    map<string|string[]> headerMap = {};
+    foreach var [key, value] in headerParam.entries() {
+        if value is SimpleBasicType[] {
+            headerMap[key] = from SimpleBasicType data in value
+                select data.toString();
+        } else {
+            headerMap[key] = value.toString();
+        }
+    }
+    return headerMap;
+}

@@ -20,6 +20,422 @@
 import ballerina/constraint;
 import ballerina/http;
 
+# A set of resources that are used by the assistant's tools. The resources are specific to the type of tool. For example, the `code_interpreter` tool requires a list of file IDs, while the `file_search` tool requires a list of vector store IDs.
+public type CreateThreadAndRunRequest_tool_resources record {
+    CreateAssistantRequest_tool_resources_code_interpreter code_interpreter?;
+    AssistantObject_tool_resources_file_search file_search?;
+};
+
+public type ModifyAssistantRequest_tool_resources_file_search record {
+    # Overrides the [vector store](/docs/api-reference/vector-stores/object) attached to this assistant. There can be a maximum of 1 vector store attached to the assistant.
+    @constraint:Array {maxLength: 1}
+    string[] vector_store_ids?;
+};
+
+# Represents the Headers record for the operation: listMessages
+public type ListMessagesHeaders record {
+    string OpenAI\-Beta;
+};
+
+# Represents the Headers record for the operation: getAssistant
+public type GetAssistantHeaders record {
+    string OpenAI\-Beta;
+};
+
+# Represents the Headers record for the operation: modifyThread
+public type ModifyThreadHeaders record {
+    string OpenAI\-Beta;
+};
+
+public type ListRunsResponse record {
+    string 'object;
+    RunObject[] data;
+    string first_id;
+    string last_id;
+    boolean has_more;
+};
+
+# Specifies the format that the model must output. Compatible with [GPT-4o](/docs/models/gpt-4o), [GPT-4 Turbo](/docs/models/gpt-4-turbo-and-gpt-4), and all GPT-3.5 Turbo models since `gpt-3.5-turbo-1106`.
+# 
+# Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message the model generates is valid JSON.
+# 
+# **Important:** when using JSON mode, you **must** also instruct the model to produce JSON yourself via a system or user message. Without this, the model may generate an unending stream of whitespace until the generation reaches the token limit, resulting in a long-running and seemingly "stuck" request. Also note that the message content may be partially cut off if `finish_reason="length"`, which indicates the generation exceeded `max_tokens` or the conversation exceeded the max context length.
+public type AssistantsApiResponseFormatOption "none"|"auto"|AssistantsApiResponseFormat;
+
+public type RunStepDetailsToolCallsFunctionObject record {
+    # The ID of the tool call object.
+    string id;
+    # The type of tool call. This is always going to be `function` for this type of tool call.
+    "function" 'type;
+    RunStepDetailsToolCallsFunctionObject_function 'function;
+};
+
+public type CreateRunRequest record {|
+    # The ID of the [assistant](/docs/api-reference/assistants) to use to execute this run.
+    string assistant_id;
+    # The ID of the [Model](/docs/api-reference/models) to be used to execute this run. If a value is provided here, it will override the model associated with the assistant. If not, the model associated with the assistant will be used.
+    string|"gpt-4o"|"gpt-4o-2024-05-13"|"gpt-4o-mini"|"gpt-4o-mini-2024-07-18"|"gpt-4-turbo"|"gpt-4-turbo-2024-04-09"|"gpt-4-0125-preview"|"gpt-4-turbo-preview"|"gpt-4-1106-preview"|"gpt-4-vision-preview"|"gpt-4"|"gpt-4-0314"|"gpt-4-0613"|"gpt-4-32k"|"gpt-4-32k-0314"|"gpt-4-32k-0613"|"gpt-3.5-turbo"|"gpt-3.5-turbo-16k"|"gpt-3.5-turbo-0613"|"gpt-3.5-turbo-1106"|"gpt-3.5-turbo-0125"|"gpt-3.5-turbo-16k-0613"? model?;
+    # Overrides the [instructions](/docs/api-reference/assistants/createAssistant) of the assistant. This is useful for modifying the behavior on a per-run basis.
+    string? instructions?;
+    # Appends additional instructions at the end of the instructions for the run. This is useful for modifying the behavior on a per-run basis without overriding other instructions.
+    string? additional_instructions?;
+    # Adds additional messages to the thread before creating the run.
+    CreateMessageRequest[]? additional_messages?;
+    # Override the tools the assistant can use for this run. This is useful for modifying the behavior on a per-run basis.
+    (AssistantToolsCode|AssistantToolsFileSearch|AssistantToolsFunction)[]? tools?;
+    # Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.
+    record {}? metadata?;
+    # What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
+    decimal? temperature = 1;
+    # An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
+    # 
+    # We generally recommend altering this or temperature but not both.
+    decimal? top_p = 1;
+    # The maximum number of prompt tokens that may be used over the course of the run. The run will make a best effort to use only the number of prompt tokens specified, across multiple turns of the run. If the run exceeds the number of prompt tokens specified, the run will end with status `incomplete`. See `incomplete_details` for more info.
+    int? max_prompt_tokens?;
+    # The maximum number of completion tokens that may be used over the course of the run. The run will make a best effort to use only the number of completion tokens specified, across multiple turns of the run. If the run exceeds the number of completion tokens specified, the run will end with status `incomplete`. See `incomplete_details` for more info.
+    int? max_completion_tokens?;
+    TruncationObject truncation_strategy?;
+    AssistantsApiToolChoiceOption tool_choice?;
+    ParallelToolCalls parallel_tool_calls?;
+    AssistantsApiResponseFormatOption response_format?;
+|};
+
+# Represents the Headers record for the operation: deleteMessage
+public type DeleteMessageHeaders record {
+    string OpenAI\-Beta;
+};
+
+public type MessageContentImageUrlObject_image_url record {
+    # The external URL of the image, must be a supported image types: jpeg, jpg, png, gif, webp.
+    string url;
+    # Specifies the detail level of the image. `low` uses fewer tokens, you can opt in to high resolution using `high`. Default value is `auto`
+    "auto"|"low"|"high" detail = "auto";
+};
+
+# A set of resources that are used by the assistant's tools. The resources are specific to the type of tool. For example, the `code_interpreter` tool requires a list of file IDs, while the `file_search` tool requires a list of vector store IDs.
+public type AssistantObject_tool_resources record {
+    AssistantObject_tool_resources_code_interpreter code_interpreter?;
+    AssistantObject_tool_resources_file_search file_search?;
+};
+
+# Provides a set of configurations for controlling the behaviours when communicating with a remote HTTP endpoint.
+@display {label: "Connection Config"}
+public type ConnectionConfig record {|
+    # Configurations related to client authentication
+    http:BearerTokenConfig auth;
+    # The HTTP version understood by the client
+    http:HttpVersion httpVersion = http:HTTP_2_0;
+    # Configurations related to HTTP/1.x protocol
+    ClientHttp1Settings http1Settings?;
+    # Configurations related to HTTP/2 protocol
+    http:ClientHttp2Settings http2Settings?;
+    # The maximum time to wait (in seconds) for a response before closing the connection
+    decimal timeout = 60;
+    # The choice of setting `forwarded`/`x-forwarded` header
+    string forwarded = "disable";
+    # Configurations associated with request pooling
+    http:PoolConfiguration poolConfig?;
+    # HTTP caching related configurations
+    http:CacheConfig cache?;
+    # Specifies the way of handling compression (`accept-encoding`) header
+    http:Compression compression = http:COMPRESSION_AUTO;
+    # Configurations associated with the behaviour of the Circuit Breaker
+    http:CircuitBreakerConfig circuitBreaker?;
+    # Configurations associated with retrying
+    http:RetryConfig retryConfig?;
+    # Configurations associated with inbound response size limits
+    http:ResponseLimitConfigs responseLimits?;
+    # SSL/TLS-related options
+    http:ClientSecureSocket secureSocket?;
+    # Proxy server related options
+    http:ProxyConfig proxy?;
+    # Enables the inbound payload validation functionality which provided by the constraint package. Enabled by default
+    boolean validation = true;
+|};
+
+# Represents the Headers record for the operation: submitToolOuputsToRun
+public type SubmitToolOuputsToRunHeaders record {
+    string OpenAI\-Beta;
+};
+
+public type AssistantToolsFileSearchTypeOnly record {
+    # The type of tool being defined: `file_search`
+    "file_search" 'type;
+};
+
+# Represents the Headers record for the operation: createThread
+public type CreateThreadHeaders record {
+    string OpenAI\-Beta;
+};
+
+public type AssistantToolsFileSearch record {
+    # The type of tool being defined: `file_search`
+    "file_search" 'type;
+    AssistantToolsFileSearch_file_search file_search?;
+};
+
+# Details on the tool outputs needed for this run to continue.
+public type RunObject_required_action_submit_tool_outputs record {
+    # A list of the relevant tool calls.
+    RunToolCallObject[] tool_calls;
+};
+
+public type MessageObject_attachments record {
+    # The ID of the file to attach to the message.
+    string file_id?;
+    # The tools to add this file to.
+    (AssistantToolsCode|AssistantToolsFileSearchTypeOnly)[] tools?;
+};
+
+# Represents the Headers record for the operation: createMessage
+public type CreateMessageHeaders record {
+    string OpenAI\-Beta;
+};
+
+public type RunStepDetailsMessageCreationObject_message_creation record {
+    # The ID of the message that was created by this run step.
+    string message_id;
+};
+
+# Whether to enable [parallel function calling](/docs/guides/function-calling/parallel-function-calling) during tool use.
+public type ParallelToolCalls boolean;
+
+public type AssistantToolsCode record {
+    # The type of tool being defined: `code_interpreter`
+    "code_interpreter" 'type;
+};
+
+public type MessageContentImageFileObject_image_file record {
+    # The [File](/docs/api-reference/files) ID of the image in the message content. Set `purpose="vision"` when uploading the File if you need to later display the file content.
+    string file_id;
+    # Specifies the detail level of the image if specified by the user. `low` uses fewer tokens, you can opt in to high resolution using `high`.
+    "auto"|"low"|"high" detail = "auto";
+};
+
+# Represents the Headers record for the operation: modifyMessage
+public type ModifyMessageHeaders record {
+    string OpenAI\-Beta;
+};
+
+public type ModifyThreadRequest record {|
+    ThreadObject_tool_resources? tool_resources?;
+    # Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.
+    record {}? metadata?;
+|};
+
+# The text content that is part of a message.
+public type MessageContentTextObject record {
+    # Always `text`.
+    "text" 'type;
+    MessageContentTextObject_text text;
+};
+
+public type DeleteMessageResponse record {
+    string id;
+    boolean deleted;
+    "thread.message.deleted" 'object;
+};
+
+# Details on the action required to continue the run. Will be `null` if no action is required.
+public type RunObject_required_action record {
+    # For now, this is always `submit_tool_outputs`.
+    "submit_tool_outputs" 'type;
+    RunObject_required_action_submit_tool_outputs submit_tool_outputs;
+};
+
+# Represents the Headers record for the operation: listRunSteps
+public type ListRunStepsHeaders record {
+    string OpenAI\-Beta;
+};
+
+public type CreateThreadRequest record {|
+    # A list of [messages](/docs/api-reference/messages) to start the thread with.
+    CreateMessageRequest[] messages?;
+    CreateThreadRequest_tool_resources? tool_resources?;
+    # Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.
+    record {}? metadata?;
+|};
+
+# Represents the Queries record for the operation: listMessages
+public type ListMessagesQueries record {
+    # Filter messages by the run ID that generated them.
+    string run_id?;
+    # A cursor for use in pagination. `before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include before=obj_foo in order to fetch the previous page of the list.
+    string before?;
+    # A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20.
+    int 'limit = 20;
+    # A cursor for use in pagination. `after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include after=obj_foo in order to fetch the next page of the list.
+    string after?;
+    # Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and `desc` for descending order.
+    "asc"|"desc" 'order = "desc";
+};
+
+# Represents the Headers record for the operation: createRun
+public type CreateRunHeaders record {
+    string OpenAI\-Beta;
+};
+
+# A set of resources that are made available to the assistant's tools in this thread. The resources are specific to the type of tool. For example, the `code_interpreter` tool requires a list of file IDs, while the `file_search` tool requires a list of vector store IDs.
+public type ThreadObject_tool_resources record {
+    CreateAssistantRequest_tool_resources_code_interpreter code_interpreter?;
+    ThreadObject_tool_resources_file_search file_search?;
+};
+
+# Usage statistics related to the run. This value will be `null` if the run is not in a terminal state (i.e. `in_progress`, `queued`, etc.).
+public type RunCompletionUsage record {
+    # Number of completion tokens used over the course of the run.
+    int completion_tokens;
+    # Number of prompt tokens used over the course of the run.
+    int prompt_tokens;
+    # Total number of tokens used (prompt + completion).
+    int total_tokens;
+};
+
+public type CreateAssistantRequest_tool_resources_code_interpreter record {
+    # A list of [file](/docs/api-reference/files) IDs made available to the `code_interpreter` tool. There can be a maximum of 20 files associated with the tool.
+    @constraint:Array {maxLength: 20}
+    string[] file_ids = [];
+};
+
+# References an image URL in the content of a message.
+public type MessageContentImageUrlObject record {
+    # The type of the content part.
+    "image_url" 'type;
+    MessageContentImageUrlObject_image_url image_url;
+};
+
+# The function definition.
+public type RunToolCallObject_function record {
+    # The name of the function.
+    string name;
+    # The arguments that the model expects you to pass to the function.
+    string arguments;
+};
+
+# Tool call objects
+public type RunToolCallObject record {
+    # The ID of the tool call. This ID must be referenced when you submit the tool outputs in using the [Submit tool outputs to run](/docs/api-reference/runs/submitToolOutputs) endpoint.
+    string id;
+    # The type of tool call the output is required for. For now, this is always `function`.
+    "function" 'type;
+    RunToolCallObject_function 'function;
+};
+
+public type ChatCompletionNamedToolChoice_function record {
+    # The name of the function to call.
+    string name;
+};
+
+# Represents the Headers record for the operation: deleteThread
+public type DeleteThreadHeaders record {
+    string OpenAI\-Beta;
+};
+
+# Details of the tool call.
+public type RunStepDetailsToolCallsObject record {
+    # Always `tool_calls`.
+    "tool_calls" 'type;
+    # An array of tool calls the run step was involved in. These can be associated with one of three types of tools: `code_interpreter`, `file_search`, or `function`.
+    (RunStepDetailsToolCallsCodeObject|RunStepDetailsToolCallsFileSearchObject|RunStepDetailsToolCallsFunctionObject)[] tool_calls;
+};
+
+public type AssistantToolsFunction record {
+    # The type of tool being defined: `function`
+    "function" 'type;
+    FunctionObject 'function;
+};
+
+# Controls for how a thread will be truncated prior to the run. Use this to control the intial context window of the run.
+public type TruncationObject record {
+    # The truncation strategy to use for the thread. The default is `auto`. If set to `last_messages`, the thread will be truncated to the n most recent messages in the thread. When set to `auto`, messages in the middle of the thread will be dropped to fit the context length of the model, `max_prompt_tokens`.
+    "auto"|"last_messages" 'type;
+    # The number of most recent messages from the thread when constructing the context for the run.
+    int? last_messages?;
+};
+
+# Represents the Headers record for the operation: getRun
+public type GetRunHeaders record {
+    string OpenAI\-Beta;
+};
+
+# An object describing the expected output of the model. If `json_object` only `function` type `tools` are allowed to be passed to the Run. If `text` the model can return text or any value needed.
+public type AssistantsApiResponseFormat record {
+    # Must be one of `text` or `json_object`.
+    "text"|"json_object" 'type = "text";
+};
+
+# The Code Interpreter tool call definition.
+public type RunStepDetailsToolCallsCodeObject_code_interpreter record {
+    # The input to the Code Interpreter tool call.
+    string input;
+    # The outputs from the Code Interpreter tool call. Code Interpreter can output one or more items, including text (`logs`) or images (`image`). Each of these are represented by a different object type.
+    (RunStepDetailsToolCallsCodeOutputLogsObject|RunStepDetailsToolCallsCodeOutputImageObject)[] outputs;
+};
+
+public type ListMessagesResponse record {
+    string 'object;
+    MessageObject[] data;
+    string? first_id;
+    string? last_id;
+    boolean has_more;
+};
+
+# Represents the Headers record for the operation: deleteAssistant
+public type DeleteAssistantHeaders record {
+    string OpenAI\-Beta;
+};
+
+public type ListAssistantsResponse record {
+    string 'object;
+    AssistantObject[] data;
+    string first_id;
+    string last_id;
+    boolean has_more;
+};
+
+# Provides settings related to HTTP/1.x protocol.
+public type ClientHttp1Settings record {|
+    # Specifies whether to reuse a connection for multiple requests
+    http:KeepAlive keepAlive = http:KEEPALIVE_AUTO;
+    # The chunking behaviour of the request
+    http:Chunking chunking = http:CHUNKING_AUTO;
+    # Proxy server related options
+    ProxyConfig proxy?;
+|};
+
+# The text content that is part of a message.
+public type MessageRequestContentTextObject record {
+    # Always `text`.
+    "text" 'type;
+    # Text content to be sent to the model
+    string text;
+};
+
+# A set of resources that are used by the assistant's tools. The resources are specific to the type of tool. For example, the `code_interpreter` tool requires a list of file IDs, while the `file_search` tool requires a list of vector store IDs.
+public type CreateAssistantRequest_tool_resources record {
+    CreateAssistantRequest_tool_resources_code_interpreter code_interpreter?;
+    CreateAssistantRequest_tool_resources_file_search file_search?;
+};
+
+# Represents the Queries record for the operation: listRuns
+public type ListRunsQueries record {
+    # A cursor for use in pagination. `before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include before=obj_foo in order to fetch the previous page of the list.
+    string before?;
+    # A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20.
+    int 'limit = 20;
+    # A cursor for use in pagination. `after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include after=obj_foo in order to fetch the next page of the list.
+    string after?;
+    # Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and `desc` for descending order.
+    "asc"|"desc" 'order = "desc";
+};
+
+public type ModifyAssistantRequest_tool_resources_code_interpreter record {
+    # Overrides the list of [file](/docs/api-reference/files) IDs made available to the `code_interpreter` tool. There can be a maximum of 20 files associated with the tool.
+    @constraint:Array {maxLength: 20}
+    string[] file_ids = [];
+};
+
 # Usage statistics related to the run step. This value will be `null` while the run step's status is `in_progress`.
 public type RunStepCompletionUsage record {
     # Number of completion tokens used over the course of the run step.
@@ -30,10 +446,9 @@ public type RunStepCompletionUsage record {
     int total_tokens;
 };
 
-# A set of resources that are used by the assistant's tools. The resources are specific to the type of tool. For example, the `code_interpreter` tool requires a list of file IDs, while the `file_search` tool requires a list of vector store IDs.
-public type CreateThreadAndRunRequest_tool_resources record {
-    CreateAssistantRequest_tool_resources_code_interpreter code_interpreter?;
-    AssistantObject_tool_resources_file_search file_search?;
+# Represents the Headers record for the operation: getRunStep
+public type GetRunStepHeaders record {
+    string OpenAI\-Beta;
 };
 
 # Represents a thread that contains [messages](/docs/api-reference/messages).
@@ -59,6 +474,16 @@ public type RunStepDetailsToolCallsFunctionObject_function record {
     string? output;
 };
 
+# Represents the Headers record for the operation: getThread
+public type GetThreadHeaders record {
+    string OpenAI\-Beta;
+};
+
+# Represents the Headers record for the operation: modifyRun
+public type ModifyRunHeaders record {
+    string OpenAI\-Beta;
+};
+
 # A citation within the message that points to a specific quote from a specific File associated with the assistant or the message. Generated when the assistant uses the "file_search" tool to search files.
 public type MessageContentTextAnnotationsFileCitationObject record {
     # Always `file_citation`.
@@ -70,12 +495,6 @@ public type MessageContentTextAnnotationsFileCitationObject record {
     int start_index;
     @constraint:Int {minValue: 0}
     int end_index;
-};
-
-public type ModifyAssistantRequest_tool_resources_file_search record {
-    # Overrides the [vector store](/docs/api-reference/vector-stores/object) attached to this assistant. There can be a maximum of 1 vector store attached to the assistant.
-    @constraint:Array {maxLength: 1}
-    string[] vector_store_ids?;
 };
 
 # Overrides for the file search tool.
@@ -125,34 +544,16 @@ public type RunStepObject_last_error record {
     string message;
 };
 
+# Represents the Headers record for the operation: getMessage
+public type GetMessageHeaders record {
+    string OpenAI\-Beta;
+};
+
 public type SubmitToolOutputsRunRequest_tool_outputs record {
     # The ID of the tool call in the `required_action` object within the run object the output is being submitted for.
     string tool_call_id?;
     # The output of the tool call to be submitted to continue the run.
     string output?;
-};
-
-public type ListRunsResponse record {
-    string 'object;
-    RunObject[] data;
-    string first_id;
-    string last_id;
-    boolean has_more;
-};
-
-# Specifies the format that the model must output. Compatible with [GPT-4o](/docs/models/gpt-4o), [GPT-4 Turbo](/docs/models/gpt-4-turbo-and-gpt-4), and all GPT-3.5 Turbo models since `gpt-3.5-turbo-1106`.
-# 
-# Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message the model generates is valid JSON.
-# 
-# **Important:** when using JSON mode, you **must** also instruct the model to produce JSON yourself via a system or user message. Without this, the model may generate an unending stream of whitespace until the generation reaches the token limit, resulting in a long-running and seemingly "stuck" request. Also note that the message content may be partially cut off if `finish_reason="length"`, which indicates the generation exceeded `max_tokens` or the conversation exceeded the max context length.
-public type AssistantsApiResponseFormatOption "none"|"auto"|AssistantsApiResponseFormat;
-
-public type RunStepDetailsToolCallsFunctionObject record {
-    # The ID of the tool call object.
-    string id;
-    # The type of tool call. This is always going to be `function` for this type of tool call.
-    "function" 'type;
-    RunStepDetailsToolCallsFunctionObject_function 'function;
 };
 
 public type ThreadObject_tool_resources_file_search record {
@@ -161,48 +562,9 @@ public type ThreadObject_tool_resources_file_search record {
     string[] vector_store_ids?;
 };
 
-public type CreateRunRequest record {|
-    # The ID of the [assistant](/docs/api-reference/assistants) to use to execute this run.
-    string assistant_id;
-    # The ID of the [Model](/docs/api-reference/models) to be used to execute this run. If a value is provided here, it will override the model associated with the assistant. If not, the model associated with the assistant will be used.
-    string|"gpt-4o"|"gpt-4o-2024-05-13"|"gpt-4o-mini"|"gpt-4o-mini-2024-07-18"|"gpt-4-turbo"|"gpt-4-turbo-2024-04-09"|"gpt-4-0125-preview"|"gpt-4-turbo-preview"|"gpt-4-1106-preview"|"gpt-4-vision-preview"|"gpt-4"|"gpt-4-0314"|"gpt-4-0613"|"gpt-4-32k"|"gpt-4-32k-0314"|"gpt-4-32k-0613"|"gpt-3.5-turbo"|"gpt-3.5-turbo-16k"|"gpt-3.5-turbo-0613"|"gpt-3.5-turbo-1106"|"gpt-3.5-turbo-0125"|"gpt-3.5-turbo-16k-0613"? model?;
-    # Overrides the [instructions](/docs/api-reference/assistants/createAssistant) of the assistant. This is useful for modifying the behavior on a per-run basis.
-    string? instructions?;
-    # Appends additional instructions at the end of the instructions for the run. This is useful for modifying the behavior on a per-run basis without overriding other instructions.
-    string? additional_instructions?;
-    # Adds additional messages to the thread before creating the run.
-    CreateMessageRequest[]? additional_messages?;
-    # Override the tools the assistant can use for this run. This is useful for modifying the behavior on a per-run basis.
-    (AssistantToolsCode|AssistantToolsFileSearch|AssistantToolsFunction)[]? tools?;
-    # Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.
-    record {}? metadata?;
-    # What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
-    decimal? temperature = 1;
-    # An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
-    # 
-    # We generally recommend altering this or temperature but not both.
-    decimal? top_p = 1;
-    # The maximum number of prompt tokens that may be used over the course of the run. The run will make a best effort to use only the number of prompt tokens specified, across multiple turns of the run. If the run exceeds the number of prompt tokens specified, the run will end with status `incomplete`. See `incomplete_details` for more info.
-    int? max_prompt_tokens?;
-    # The maximum number of completion tokens that may be used over the course of the run. The run will make a best effort to use only the number of completion tokens specified, across multiple turns of the run. If the run exceeds the number of completion tokens specified, the run will end with status `incomplete`. See `incomplete_details` for more info.
-    int? max_completion_tokens?;
-    TruncationObject truncation_strategy?;
-    AssistantsApiToolChoiceOption tool_choice?;
-    ParallelToolCalls parallel_tool_calls?;
-    AssistantsApiResponseFormatOption response_format?;
-|};
-
-public type MessageContentImageUrlObject_image_url record {
-    # The external URL of the image, must be a supported image types: jpeg, jpg, png, gif, webp.
-    string url;
-    # Specifies the detail level of the image. `low` uses fewer tokens, you can opt in to high resolution using `high`. Default value is `auto`
-    "auto"|"low"|"high" detail = "auto";
-};
-
-# A set of resources that are used by the assistant's tools. The resources are specific to the type of tool. For example, the `code_interpreter` tool requires a list of file IDs, while the `file_search` tool requires a list of vector store IDs.
-public type AssistantObject_tool_resources record {
-    AssistantObject_tool_resources_code_interpreter code_interpreter?;
-    AssistantObject_tool_resources_file_search file_search?;
+# Represents the Headers record for the operation: modifyAssistant
+public type ModifyAssistantHeaders record {
+    string OpenAI\-Beta;
 };
 
 # Details of the Code Interpreter tool call the run step was involved in.
@@ -219,41 +581,6 @@ public type SubmitToolOutputsRunRequest record {|
     SubmitToolOutputsRunRequest_tool_outputs[] tool_outputs;
 |};
 
-# Provides a set of configurations for controlling the behaviours when communicating with a remote HTTP endpoint.
-@display {label: "Connection Config"}
-public type ConnectionConfig record {|
-    # Configurations related to client authentication
-    http:BearerTokenConfig auth;
-    # The HTTP version understood by the client
-    http:HttpVersion httpVersion = http:HTTP_2_0;
-    # Configurations related to HTTP/1.x protocol
-    ClientHttp1Settings http1Settings?;
-    # Configurations related to HTTP/2 protocol
-    http:ClientHttp2Settings http2Settings?;
-    # The maximum time to wait (in seconds) for a response before closing the connection
-    decimal timeout = 60;
-    # The choice of setting `forwarded`/`x-forwarded` header
-    string forwarded = "disable";
-    # Configurations associated with request pooling
-    http:PoolConfiguration poolConfig?;
-    # HTTP caching related configurations
-    http:CacheConfig cache?;
-    # Specifies the way of handling compression (`accept-encoding`) header
-    http:Compression compression = http:COMPRESSION_AUTO;
-    # Configurations associated with the behaviour of the Circuit Breaker
-    http:CircuitBreakerConfig circuitBreaker?;
-    # Configurations associated with retrying
-    http:RetryConfig retryConfig?;
-    # Configurations associated with inbound response size limits
-    http:ResponseLimitConfigs responseLimits?;
-    # SSL/TLS-related options
-    http:ClientSecureSocket secureSocket?;
-    # Proxy server related options
-    http:ProxyConfig proxy?;
-    # Enables the inbound payload validation functionality which provided by the constraint package. Enabled by default
-    boolean validation = true;
-|};
-
 # Represents the Queries record for the operation: listRunSteps
 public type ListRunStepsQueries record {
     # A cursor for use in pagination. `before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include before=obj_foo in order to fetch the previous page of the list.
@@ -264,11 +591,6 @@ public type ListRunStepsQueries record {
     string after?;
     # Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and `desc` for descending order.
     "asc"|"desc" 'order = "desc";
-};
-
-public type AssistantToolsFileSearchTypeOnly record {
-    # The type of tool being defined: `file_search`
-    "file_search" 'type;
 };
 
 # Represents an execution run on a [thread](/docs/api-reference/threads).
@@ -322,29 +644,10 @@ public type RunObject record {
     AssistantsApiResponseFormatOption response_format;
 };
 
-public type AssistantToolsFileSearch record {
-    # The type of tool being defined: `file_search`
-    "file_search" 'type;
-    AssistantToolsFileSearch_file_search file_search?;
-};
-
 # A set of resources that are made available to the assistant's tools in this thread. The resources are specific to the type of tool. For example, the `code_interpreter` tool requires a list of file IDs, while the `file_search` tool requires a list of vector store IDs.
 public type CreateThreadRequest_tool_resources record {
     CreateAssistantRequest_tool_resources_code_interpreter code_interpreter?;
     CreateThreadRequest_tool_resources_file_search file_search?;
-};
-
-# Details on the tool outputs needed for this run to continue.
-public type RunObject_required_action_submit_tool_outputs record {
-    # A list of the relevant tool calls.
-    RunToolCallObject[] tool_calls;
-};
-
-public type MessageObject_attachments record {
-    # The ID of the file to attach to the message.
-    string file_id?;
-    # The tools to add this file to.
-    (AssistantToolsCode|AssistantToolsFileSearchTypeOnly)[] tools?;
 };
 
 public type ModifyRunRequest record {|
@@ -357,13 +660,10 @@ public type MessageContentTextAnnotationsFileCitationObject_file_citation record
     string file_id;
 };
 
-public type RunStepDetailsMessageCreationObject_message_creation record {
-    # The ID of the message that was created by this run step.
-    string message_id;
+# Represents the Headers record for the operation: listAssistants
+public type ListAssistantsHeaders record {
+    string OpenAI\-Beta;
 };
-
-# Whether to enable [parallel function calling](/docs/guides/function-calling/parallel-function-calling) during tool use.
-public type ParallelToolCalls boolean;
 
 # Represents the Queries record for the operation: listAssistants
 public type ListAssistantsQueries record {
@@ -375,18 +675,6 @@ public type ListAssistantsQueries record {
     string after?;
     # Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and `desc` for descending order.
     "asc"|"desc" 'order = "desc";
-};
-
-public type AssistantToolsCode record {
-    # The type of tool being defined: `code_interpreter`
-    "code_interpreter" 'type;
-};
-
-public type MessageContentImageFileObject_image_file record {
-    # The [File](/docs/api-reference/files) ID of the image in the message content. Set `purpose="vision"` when uploading the File if you need to later display the file content.
-    string file_id;
-    # Specifies the detail level of the image if specified by the user. `low` uses fewer tokens, you can opt in to high resolution using `high`.
-    "auto"|"low"|"high" detail = "auto";
 };
 
 public type ModifyMessageRequest record {|
@@ -415,6 +703,11 @@ public type RunObject_last_error record {
     string message;
 };
 
+# Represents the Headers record for the operation: cancelRun
+public type CancelRunHeaders record {
+    string OpenAI\-Beta;
+};
+
 # The parameters the functions accepts, described as a JSON Schema object. See the [guide](/docs/guides/function-calling) for examples, and the [JSON Schema reference](https://json-schema.org/understanding-json-schema/) for documentation about the format. 
 # 
 # Omitting `parameters` defines a function with an empty parameter list.
@@ -433,50 +726,16 @@ public type CreateMessageRequest record {|
     record {}? metadata?;
 |};
 
-public type ModifyThreadRequest record {|
-    ThreadObject_tool_resources? tool_resources?;
-    # Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.
-    record {}? metadata?;
-|};
-
 public type MessageContentTextObject_text record {
     # The data that makes up the text.
     string value;
     (MessageContentTextAnnotationsFileCitationObject|MessageContentTextAnnotationsFilePathObject)[] annotations;
 };
 
-# The text content that is part of a message.
-public type MessageContentTextObject record {
-    # Always `text`.
-    "text" 'type;
-    MessageContentTextObject_text text;
-};
-
 public type RunStepDetailsToolCallsCodeOutputImageObject_image record {
     # The [file](/docs/api-reference/files) ID of the image.
     string file_id;
 };
-
-public type DeleteMessageResponse record {
-    string id;
-    boolean deleted;
-    "thread.message.deleted" 'object;
-};
-
-# Details on the action required to continue the run. Will be `null` if no action is required.
-public type RunObject_required_action record {
-    # For now, this is always `submit_tool_outputs`.
-    "submit_tool_outputs" 'type;
-    RunObject_required_action_submit_tool_outputs submit_tool_outputs;
-};
-
-public type CreateThreadRequest record {|
-    # A list of [messages](/docs/api-reference/messages) to start the thread with.
-    CreateMessageRequest[] messages?;
-    CreateThreadRequest_tool_resources? tool_resources?;
-    # Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.
-    record {}? metadata?;
-|};
 
 # Represents a step in execution of a run.
 public type RunStepObject record {
@@ -512,20 +771,6 @@ public type RunStepObject record {
     RunStepCompletionUsage? usage;
 };
 
-# Represents the Queries record for the operation: listMessages
-public type ListMessagesQueries record {
-    # Filter messages by the run ID that generated them.
-    string run_id?;
-    # A cursor for use in pagination. `before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include before=obj_foo in order to fetch the previous page of the list.
-    string before?;
-    # A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20.
-    int 'limit = 20;
-    # A cursor for use in pagination. `after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include after=obj_foo in order to fetch the next page of the list.
-    string after?;
-    # Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and `desc` for descending order.
-    "asc"|"desc" 'order = "desc";
-};
-
 public type FunctionObject record {
     # A description of what the function does, used by the model to choose when and how to call the function.
     string description?;
@@ -556,22 +801,6 @@ public type RunObject_incomplete_details record {
     "max_completion_tokens"|"max_prompt_tokens" reason?;
 };
 
-# A set of resources that are made available to the assistant's tools in this thread. The resources are specific to the type of tool. For example, the `code_interpreter` tool requires a list of file IDs, while the `file_search` tool requires a list of vector store IDs.
-public type ThreadObject_tool_resources record {
-    CreateAssistantRequest_tool_resources_code_interpreter code_interpreter?;
-    ThreadObject_tool_resources_file_search file_search?;
-};
-
-# Usage statistics related to the run. This value will be `null` if the run is not in a terminal state (i.e. `in_progress`, `queued`, etc.).
-public type RunCompletionUsage record {
-    # Number of completion tokens used over the course of the run.
-    int completion_tokens;
-    # Number of prompt tokens used over the course of the run.
-    int prompt_tokens;
-    # Total number of tokens used (prompt + completion).
-    int total_tokens;
-};
-
 public type CreateAssistantRequest record {|
     # ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to see all of your available models, or see our [Model overview](/docs/models/overview) for descriptions of them.
     string|"gpt-4o"|"gpt-4o-2024-05-13"|"gpt-4o-mini"|"gpt-4o-mini-2024-07-18"|"gpt-4-turbo"|"gpt-4-turbo-2024-04-09"|"gpt-4-0125-preview"|"gpt-4-turbo-preview"|"gpt-4-1106-preview"|"gpt-4-vision-preview"|"gpt-4"|"gpt-4-0314"|"gpt-4-0613"|"gpt-4-32k"|"gpt-4-32k-0314"|"gpt-4-32k-0613"|"gpt-3.5-turbo"|"gpt-3.5-turbo-16k"|"gpt-3.5-turbo-0613"|"gpt-3.5-turbo-1106"|"gpt-3.5-turbo-0125"|"gpt-3.5-turbo-16k-0613" model;
@@ -596,12 +825,6 @@ public type CreateAssistantRequest record {|
     AssistantsApiResponseFormatOption response_format?;
 |};
 
-public type CreateAssistantRequest_tool_resources_code_interpreter record {
-    # A list of [file](/docs/api-reference/files) IDs made available to the `code_interpreter` tool. There can be a maximum of 20 files associated with the tool.
-    @constraint:Array {maxLength: 20}
-    string[] file_ids = [];
-};
-
 # References an image [File](/docs/api-reference/files) in the content of a message.
 public type MessageContentImageFileObject record {
     # Always `image_file`.
@@ -609,47 +832,10 @@ public type MessageContentImageFileObject record {
     MessageContentImageFileObject_image_file image_file;
 };
 
-# References an image URL in the content of a message.
-public type MessageContentImageUrlObject record {
-    # The type of the content part.
-    "image_url" 'type;
-    MessageContentImageUrlObject_image_url image_url;
-};
-
 public type DeleteAssistantResponse record {
     string id;
     boolean deleted;
     "assistant.deleted" 'object;
-};
-
-# The function definition.
-public type RunToolCallObject_function record {
-    # The name of the function.
-    string name;
-    # The arguments that the model expects you to pass to the function.
-    string arguments;
-};
-
-# Tool call objects
-public type RunToolCallObject record {
-    # The ID of the tool call. This ID must be referenced when you submit the tool outputs in using the [Submit tool outputs to run](/docs/api-reference/runs/submitToolOutputs) endpoint.
-    string id;
-    # The type of tool call the output is required for. For now, this is always `function`.
-    "function" 'type;
-    RunToolCallObject_function 'function;
-};
-
-public type ChatCompletionNamedToolChoice_function record {
-    # The name of the function to call.
-    string name;
-};
-
-# Details of the tool call.
-public type RunStepDetailsToolCallsObject record {
-    # Always `tool_calls`.
-    "tool_calls" 'type;
-    # An array of tool calls the run step was involved in. These can be associated with one of three types of tools: `code_interpreter`, `file_search`, or `function`.
-    (RunStepDetailsToolCallsCodeObject|RunStepDetailsToolCallsFileSearchObject|RunStepDetailsToolCallsFunctionObject)[] tool_calls;
 };
 
 public type RunStepDetailsToolCallsFileSearchObject record {
@@ -698,12 +884,6 @@ public type MessageObject_incomplete_details record {
     "content_filter"|"max_tokens"|"run_cancelled"|"run_expired"|"run_failed" reason;
 };
 
-public type AssistantToolsFunction record {
-    # The type of tool being defined: `function`
-    "function" 'type;
-    FunctionObject 'function;
-};
-
 # Proxy server configurations to be used with the HTTP client endpoint.
 public type ProxyConfig record {|
     # Host name of the proxy server
@@ -730,29 +910,20 @@ public type MessageContentTextAnnotationsFilePathObject record {
     int end_index;
 };
 
-# Controls for how a thread will be truncated prior to the run. Use this to control the intial context window of the run.
-public type TruncationObject record {
-    # The truncation strategy to use for the thread. The default is `auto`. If set to `last_messages`, the thread will be truncated to the n most recent messages in the thread. When set to `auto`, messages in the middle of the thread will be dropped to fit the context length of the model, `max_prompt_tokens`.
-    "auto"|"last_messages" 'type;
-    # The number of most recent messages from the thread when constructing the context for the run.
-    int? last_messages?;
-};
-
 public type AssistantObject_tool_resources_code_interpreter record {
     # A list of [file](/docs/api-reference/files) IDs made available to the `code_interpreter`` tool. There can be a maximum of 20 files associated with the tool.
     @constraint:Array {maxLength: 20}
     string[] file_ids = [];
 };
 
-# An object describing the expected output of the model. If `json_object` only `function` type `tools` are allowed to be passed to the Run. If `text` the model can return text or any value needed.
-public type AssistantsApiResponseFormat record {
-    # Must be one of `text` or `json_object`.
-    "text"|"json_object" 'type = "text";
-};
-
 public type MessageContentTextAnnotationsFilePathObject_file_path record {
     # The ID of the file that was generated.
     string file_id;
+};
+
+# Represents the Headers record for the operation: createThreadAndRun
+public type CreateThreadAndRunHeaders record {
+    string OpenAI\-Beta;
 };
 
 public type DeleteThreadResponse record {
@@ -790,20 +961,9 @@ public type CreateThreadAndRunRequest record {|
     AssistantsApiResponseFormatOption response_format?;
 |};
 
-# The Code Interpreter tool call definition.
-public type RunStepDetailsToolCallsCodeObject_code_interpreter record {
-    # The input to the Code Interpreter tool call.
-    string input;
-    # The outputs from the Code Interpreter tool call. Code Interpreter can output one or more items, including text (`logs`) or images (`image`). Each of these are represented by a different object type.
-    (RunStepDetailsToolCallsCodeOutputLogsObject|RunStepDetailsToolCallsCodeOutputImageObject)[] outputs;
-};
-
-public type ListMessagesResponse record {
-    string 'object;
-    MessageObject[] data;
-    string? first_id;
-    string? last_id;
-    boolean has_more;
+# Represents the Headers record for the operation: createAssistant
+public type CreateAssistantHeaders record {
+    string OpenAI\-Beta;
 };
 
 # Text output from the Code Interpreter tool call as part of a run step.
@@ -823,37 +983,16 @@ public type CreateAssistantRequest_tool_resources_file_search record {
     CreateAssistantRequest_tool_resources_file_search_vector_stores[] vector_stores?;
 };
 
-public type ListAssistantsResponse record {
-    string 'object;
-    AssistantObject[] data;
-    string first_id;
-    string last_id;
-    boolean has_more;
+# Represents the Headers record for the operation: listRuns
+public type ListRunsHeaders record {
+    string OpenAI\-Beta;
 };
-
-# Provides settings related to HTTP/1.x protocol.
-public type ClientHttp1Settings record {|
-    # Specifies whether to reuse a connection for multiple requests
-    http:KeepAlive keepAlive = http:KEEPALIVE_AUTO;
-    # The chunking behaviour of the request
-    http:Chunking chunking = http:CHUNKING_AUTO;
-    # Proxy server related options
-    ProxyConfig proxy?;
-|};
 
 # Specifies a tool the model should use. Use to force the model to call a specific tool.
 public type AssistantsNamedToolChoice record {
     # The type of the tool. If type is `function`, the function name must be set
     "function"|"code_interpreter"|"file_search" 'type;
     ChatCompletionNamedToolChoice_function 'function?;
-};
-
-# The text content that is part of a message.
-public type MessageRequestContentTextObject record {
-    # Always `text`.
-    "text" 'type;
-    # Text content to be sent to the model
-    string text;
 };
 
 # Details of the message creation by the run step.
@@ -869,24 +1008,6 @@ public type ListRunStepsResponse record {
     string? first_id;
     string? last_id;
     boolean has_more;
-};
-
-# A set of resources that are used by the assistant's tools. The resources are specific to the type of tool. For example, the `code_interpreter` tool requires a list of file IDs, while the `file_search` tool requires a list of vector store IDs.
-public type CreateAssistantRequest_tool_resources record {
-    CreateAssistantRequest_tool_resources_code_interpreter code_interpreter?;
-    CreateAssistantRequest_tool_resources_file_search file_search?;
-};
-
-# Represents the Queries record for the operation: listRuns
-public type ListRunsQueries record {
-    # A cursor for use in pagination. `before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include before=obj_foo in order to fetch the previous page of the list.
-    string before?;
-    # A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20.
-    int 'limit = 20;
-    # A cursor for use in pagination. `after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include after=obj_foo in order to fetch the next page of the list.
-    string after?;
-    # Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and `desc` for descending order.
-    "asc"|"desc" 'order = "desc";
 };
 
 # Represents a message within a [thread](/docs/api-reference/threads).
@@ -920,12 +1041,6 @@ public type MessageObject record {
     record {}? metadata;
 };
 
-public type ModifyAssistantRequest_tool_resources_code_interpreter record {
-    # Overrides the list of [file](/docs/api-reference/files) IDs made available to the `code_interpreter` tool. There can be a maximum of 20 files associated with the tool.
-    @constraint:Array {maxLength: 20}
-    string[] file_ids = [];
-};
-
 public type CreateThreadRequest_tool_resources_file_search record {
     # The [vector store](/docs/api-reference/vector-stores/object) attached to this thread. There can be a maximum of 1 vector store attached to the thread.
     @constraint:Array {maxLength: 1}
@@ -934,4 +1049,3 @@ public type CreateThreadRequest_tool_resources_file_search record {
     @constraint:Array {maxLength: 1}
     CreateAssistantRequest_tool_resources_file_search_vector_stores[] vector_stores?;
 };
-

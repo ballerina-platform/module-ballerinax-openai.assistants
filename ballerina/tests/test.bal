@@ -34,8 +34,8 @@ string messageId = "";
 string runId = "";
 string stepId = "";
 
-const map<string|string[]> headers = {
-    "OpenAI-Beta": ["assistants=v2"]
+const record {string OpenAI\-Beta;} headers = {
+    OpenAI\-Beta: "assistants=v2"
 };
 
 @test:Config {
@@ -78,7 +78,7 @@ function testCreateMessage() returns error? {
         content: "Can you help me solve the equation `3x + 11 = 14`?"
     };
 
-    MessageObject res = check openAIAssistant->/threads/[threadId]/messages.post(createMsgReq, headers);
+    MessageObject res = check openAIAssistant->/threads/[threadId]/messages.post(headers, createMsgReq);
     test:assertNotEquals(res.id, "");
     messageId = res.id;
 }
@@ -111,7 +111,7 @@ function testCreateRun() returns error? {
         max_completion_tokens: 200
     };
 
-    RunObject resp = check openAIAssistant->/threads/[threadId]/runs.post(runReq, headers);
+    RunObject resp = check openAIAssistant->/threads/[threadId]/runs.post(headers, runReq);
     test:assertNotEquals(resp.id, "", msg = "Run creation failed: No Run ID returned");
     runId = resp.id;
 }
@@ -140,7 +140,7 @@ function testCreateThreadAndRun() returns error? {
     //     max_completion_tokens: 200
     // };
 
-    // RunObject resp = check openAIAssistant->/threads/runs.post(createThreadAndRunReq, headers);
+    // RunObject resp = check openAIAssistant->/threads/runs.post(headers,createThreadAndRunReq);
     // test:assertNotEquals(resp.id, "", msg = "Thread and Run creation failed: No Run ID returned");
 }
 
@@ -152,7 +152,7 @@ function testCreateThread() returns error? {
         messages: []
     };
 
-    ThreadObject response = check openAIAssistant->/threads.post(createThreadReq, headers);
+    ThreadObject response = check openAIAssistant->/threads.post(headers, createThreadReq);
     threadId = response.id;
     test:assertNotEquals(response.id, "");
 }
@@ -201,7 +201,7 @@ function testCreateAssistant() returns error? {
         'type: "code_interpreter"
     };
 
-    CreateAssistantRequest request = {
+    CreateAssistantRequest createAssistantReq = {
         model: "gpt-3.5-turbo",
         name: "Math Tutor",
         description: "An Assistant for personal math tutoring",
@@ -209,7 +209,7 @@ function testCreateAssistant() returns error? {
         tools: [codeTool]
     };
 
-    AssistantObject res = check openAIAssistant->/assistants.post(request, headers);
+    AssistantObject res = check openAIAssistant->/assistants.post(headers, createAssistantReq);
     assistantId = res.id;
     test:assertNotEquals(res.id, "");
 }
@@ -233,6 +233,7 @@ function testListAssistants() returns error? {
     groups: ["live_tests", "mock_tests"]
 }
 function testGetRunStep() returns error? {
+
     if stepId == "" {
         test:assertEquals(stepId, "", msg = "No step ID available.");
     }

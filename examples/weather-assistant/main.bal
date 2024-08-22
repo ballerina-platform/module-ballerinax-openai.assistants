@@ -20,8 +20,9 @@ import ballerinax/openai.assistants;
 
 configurable string token = ?;
 
-final map<string|string[]> headers = {
-    "OpenAI-Beta": ["assistants=v2"]
+// Define headers
+const record {string OpenAI\-Beta;} headers = {
+    OpenAI\-Beta: "assistants=v2"
 };
 
 public function main() returns error? {
@@ -87,9 +88,9 @@ public function main() returns error? {
             getRainProbabilityTool
         ]
     };
-
+    
     // Create the assistant
-    assistants:AssistantObject response = check openaiAssistant->/assistants.post(assistantRequest, headers);
+    assistants:AssistantObject response = check openaiAssistant->/assistants.post(headers,assistantRequest);
     io:println("Assistant created successfully with ID: " + response.id);
     string assistantId = response.id;
 
@@ -97,7 +98,7 @@ public function main() returns error? {
     string threadId = "";
     assistants:CreateThreadRequest request = {};
 
-    assistants:ThreadObject threadResponse = check openaiAssistant->/threads.post(request, headers);
+    assistants:ThreadObject threadResponse = check openaiAssistant->/threads.post(headers, request);
     io:println("Thread created successfully with ID: " + threadResponse.id);
 
     threadId = threadResponse.id;
@@ -107,7 +108,7 @@ public function main() returns error? {
         content: "What's the weather in San Francisco today and the likelihood it'll rain?"
     };
 
-    assistants:MessageObject messageResponse = check openaiAssistant->/threads/[threadId]/messages.post(messageRequest, headers);
+    assistants:MessageObject messageResponse = check openaiAssistant->/threads/[threadId]/messages.post(headers, messageRequest);
     io:println("Message created successfully with ID: " + messageResponse.id);
 
     // Step 3: Initiate the run and handle function calls
@@ -121,7 +122,7 @@ public function main() returns error? {
         tool_choice: "required"
     };
 
-    assistants:RunObject runResponse = check openaiAssistant->/threads/[threadId]/runs.post(runRequest, headers);
+    assistants:RunObject runResponse = check openaiAssistant->/threads/[threadId]/runs.post(headers, runRequest);
     string runId = runResponse.id;
 
     check waitUntilRunCompletes(openaiAssistant, threadId, runId, 60);
@@ -161,8 +162,9 @@ public function main() returns error? {
         assistants:SubmitToolOutputsRunRequest submissionRequest = {
             tool_outputs: toolOutputs
         };
+
         // Submit tool outputs
-        assistants:RunObject submissionResponse = check openaiAssistant->/threads/[threadId]/runs/[runId]/submit_tool_outputs.post(submissionRequest, headers);
+        assistants:RunObject submissionResponse = check openaiAssistant->/threads/[threadId]/runs/[runId]/submit_tool_outputs.post(headers, submissionRequest);
 
         io:println("Tool outputs submitted successfully.");
         check waitUntilRunCompletes(openaiAssistant, threadId, runId, 60);

@@ -64,7 +64,7 @@ http:Service mockService = service object {
     #
     # + assistant_id - The ID of the assistant to delete.
     # + return - OK 
-    resource function delete assistants/[string assistant_id]() returns DeleteAssistantResponse {
+    resource function delete assistants/[string assistant_id](@http:Header string openai\-beta) returns DeleteAssistantResponse {
         DeleteAssistantResponse response = {
             "id": "asst_ZDxAT9DQaMD6WACtW1Ap67zE",
             "object": "assistant.deleted",
@@ -77,7 +77,7 @@ http:Service mockService = service object {
     #
     # + thread_id - The ID of the thread to delete.
     # + return - OK 
-    resource function delete threads/[string thread_id]() returns DeleteThreadResponse {
+    resource function delete threads/[string thread_id](@http:Header string openai\-beta) returns DeleteThreadResponse {
         DeleteThreadResponse response = {
             "id": "thread_Aui7BIKeelraAZvX7jc6PoLn",
             "object": "thread.deleted",
@@ -91,7 +91,7 @@ http:Service mockService = service object {
     # + thread_id - The ID of the thread to which this message belongs.
     # + message_id - The ID of the message to delete.
     # + return - OK 
-    resource function delete threads/[string thread_id]/messages/[string message_id]() returns DeleteMessageResponse {
+    resource function delete threads/[string thread_id]/messages/[string message_id](@http:Header string openai\-beta) returns DeleteMessageResponse {
         DeleteMessageResponse response = {
             "id": "msg_dNdBUSpsQt6bqCWjxi2O7RRo",
             "object": "thread.message.deleted",
@@ -107,7 +107,7 @@ http:Service mockService = service object {
     # + after - A cursor for use in pagination. `after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include after=obj_foo in order to fetch the next page of the list.
     # + before - A cursor for use in pagination. `before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include before=obj_foo in order to fetch the previous page of the list.
     # + return - OK 
-    resource function get assistants(string? after, string? before, int 'limit = 20, "asc"|"desc" 'order = "desc") returns ListAssistantsResponse {
+    resource function get assistants(@http:Header string openai\-beta, string? after, string? before, int 'limit = 20, "asc"|"desc" 'order = "desc") returns ListAssistantsResponse {
         ListAssistantsResponse response = {
             "object": "list",
             "data": [
@@ -245,7 +245,7 @@ http:Service mockService = service object {
     #
     # + assistant_id - The ID of the assistant to retrieve.
     # + return - OK 
-    resource function get assistants/[string assistant_id]() returns AssistantObject {
+    resource function get assistants/[string assistant_id](@http:Header string openai\-beta) returns AssistantObject {
         AssistantObject assistant = {
             "id": "asst_WK0UraQJvxINF81knnBogkrW",
             "object": "assistant",
@@ -276,7 +276,7 @@ http:Service mockService = service object {
     #
     # + thread_id - The ID of the thread to retrieve.
     # + return - OK 
-    resource function get threads/[string thread_id]() returns ThreadObject {
+    resource function get threads/[string thread_id](@http:Header string openai\-beta) returns ThreadObject {
         ThreadObject thread = {
             "id": "thread_Aui7BIKeelraAZvX7jc6PoLn",
             "object": "thread",
@@ -300,7 +300,7 @@ http:Service mockService = service object {
     # + before - A cursor for use in pagination. `before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include before=obj_foo in order to fetch the previous page of the list.
     # + run_id - Filter messages by the run ID that generated them.
     # + return - OK 
-    resource function get threads/[string thread_id]/messages(string? after, string? before, string? run_id, int 'limit = 20, "asc"|"desc" 'order = "desc") returns ListMessagesResponse {
+    resource function get threads/[string thread_id]/messages(@http:Header string openai\-beta, string? after, string? before, string? run_id, int 'limit = 20, "asc"|"desc" 'order = "desc") returns ListMessagesResponse {
         ListMessagesResponse response = {
             "object": "list",
             "data": [
@@ -357,7 +357,7 @@ http:Service mockService = service object {
     # + thread_id - The ID of the [thread](/docs/api-reference/threads) to which this message belongs.
     # + message_id - The ID of the message to retrieve.
     # + return - OK 
-    resource function get threads/[string thread_id]/messages/[string message_id]() returns MessageObject {
+    resource function get threads/[string thread_id]/messages/[string message_id](@http:Header string openai\-beta) returns MessageObject {
         MessageObject message = {
             "id": "msg_PBtjbgfLc82Cez4AMm6u72HI",
             "object": "thread.message",
@@ -389,7 +389,7 @@ http:Service mockService = service object {
     # + after - A cursor for use in pagination. `after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include after=obj_foo in order to fetch the next page of the list.
     # + before - A cursor for use in pagination. `before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include before=obj_foo in order to fetch the previous page of the list.
     # + return - OK 
-    resource function get threads/[string thread_id]/runs(string? after, string? before, int 'limit = 20, "asc"|"desc" 'order = "desc") returns ListRunsResponse {
+    resource function get threads/[string thread_id]/runs(@http:Header string openai\-beta, string? after, string? before, int 'limit = 20, "asc"|"desc" 'order = "desc") returns ListRunsResponse {
         ListRunsResponse response = {
             "object": "list",
             "data": [
@@ -488,7 +488,7 @@ http:Service mockService = service object {
     # + thread_id - The ID of the [thread](/docs/api-reference/threads) that was run.
     # + run_id - The ID of the run to retrieve.
     # + return - OK 
-    resource function get threads/[string thread_id]/runs/[string run_id]() returns RunObject|error {
+    resource function get threads/[string thread_id]/runs/[string run_id](@http:Header string openai\-beta) returns RunObject {
         RunObject run = {
             "id": "run_c73jgpUPMts5wIsC2jOwqYyk",
             "object": "thread.run",
@@ -542,7 +542,7 @@ http:Service mockService = service object {
     # + after - A cursor for use in pagination. `after` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include after=obj_foo in order to fetch the next page of the list.
     # + before - A cursor for use in pagination. `before` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include before=obj_foo in order to fetch the previous page of the list.
     # + return - OK 
-    resource function get threads/[string thread_id]/runs/[string run_id]/steps(string? after, string? before, int 'limit = 20, "asc"|"desc" 'order = "desc") returns ListRunStepsResponse {
+    resource function get threads/[string thread_id]/runs/[string run_id]/steps(@http:Header string openai\-beta, string? after, string? before, int 'limit = 20, "asc"|"desc" 'order = "desc") returns ListRunStepsResponse {
         ListRunStepsResponse response = {
             "object": "list",
             "data": [
@@ -586,7 +586,7 @@ http:Service mockService = service object {
     # + run_id - The ID of the run to which the run step belongs.
     # + step_id - The ID of the run step to retrieve.
     # + return - OK 
-    resource function get threads/[string thread_id]/runs/[string run_id]/steps/[string step_id]() returns RunStepObject {
+    resource function get threads/[string thread_id]/runs/[string run_id]/steps/[string step_id](@http:Header string openai\-beta) returns RunStepObject {
         RunStepObject runStep = {
             "id": "step_VJjXo2AeyYxsprKooW7yCnCF",
             "object": "thread.run.step",
@@ -619,7 +619,7 @@ http:Service mockService = service object {
     # Create an assistant with a model and instructions.
     #
     # + return - OK 
-    resource function post assistants(@http:Payload CreateAssistantRequest payload) returns OkAssistantObject {
+    resource function post assistants(@http:Header string openai\-beta, @http:Payload CreateAssistantRequest payload) returns OkAssistantObject {
         AssistantObject assistant = {
             "id": "asst_WK0UraQJvxINF81knnBogkrW",
             "object": "assistant",
@@ -657,7 +657,7 @@ http:Service mockService = service object {
     #
     # + assistant_id - The ID of the assistant to modify.
     # + return - OK 
-    resource function post assistants/[string assistant_id](@http:Payload ModifyAssistantRequest payload) returns OkAssistantObject {
+    resource function post assistants/[string assistant_id](@http:Header string openai\-beta, @http:Payload ModifyAssistantRequest payload) returns OkAssistantObject {
         AssistantObject assistant = {
             "id": "asst_WK0UraQJvxINF81knnBogkrW",
             "object": "assistant",
@@ -693,7 +693,7 @@ http:Service mockService = service object {
     # Create a thread.
     #
     # + return - OK 
-    resource function post threads(@http:Payload CreateThreadRequest payload) returns OkThreadObject {
+    resource function post threads(@http:Header string openai\-beta, @http:Payload CreateThreadRequest payload) returns OkThreadObject {
         ThreadObject thread = {
             "id": "thread_Aui7BIKeelraAZvX7jc6PoLn",
             "object": "thread",
@@ -714,7 +714,7 @@ http:Service mockService = service object {
     #
     # + thread_id - The ID of the thread to modify. Only the `metadata` can be modified.
     # + return - OK 
-    resource function post threads/[string thread_id](@http:Payload ModifyThreadRequest payload) returns OkThreadObject {
+    resource function post threads/[string thread_id](@http:Header string openai\-beta, @http:Payload ModifyThreadRequest payload) returns OkThreadObject {
         ThreadObject thread = {
             "id": "thread_Aui7BIKeelraAZvX7jc6PoLn",
             "object": "thread",
@@ -739,7 +739,7 @@ http:Service mockService = service object {
     #
     # + thread_id - The ID of the [thread](/docs/api-reference/threads) to create a message for.
     # + return - OK 
-    resource function post threads/[string thread_id]/messages(@http:Payload CreateMessageRequest payload) returns OkMessageObject {
+    resource function post threads/[string thread_id]/messages(@http:Header string openai\-beta, @http:Payload CreateMessageRequest payload) returns OkMessageObject {
         MessageObject message = {
             "id": "msg_PBtjbgfLc82Cez4AMm6u72HI",
             "object": "thread.message",
@@ -775,7 +775,7 @@ http:Service mockService = service object {
     # + thread_id - The ID of the thread to which this message belongs.
     # + message_id - The ID of the message to modify.
     # + return - OK 
-    resource function post threads/[string thread_id]/messages/[string message_id](@http:Payload ModifyMessageRequest payload) returns OkMessageObject {
+    resource function post threads/[string thread_id]/messages/[string message_id](@http:Header string openai\-beta, @http:Payload ModifyMessageRequest payload) returns OkMessageObject {
         MessageObject message = {
             "id": "msg_dNdBUSpsQt6bqCWjxi2O7RRo",
             "object": "thread.message",
@@ -809,7 +809,7 @@ http:Service mockService = service object {
     #
     # + thread_id - The ID of the thread to run.
     # + return - OK 
-    resource function post threads/[string thread_id]/runs(@http:Payload CreateRunRequest payload) returns OkRunObject {
+    resource function post threads/[string thread_id]/runs(@http:Header string openai\-beta, @http:Payload CreateRunRequest payload) returns OkRunObject {
         RunObject run = {
             "id": "run_c73jgpUPMts5wIsC2jOwqYyk",
             "object": "thread.run",
@@ -861,7 +861,7 @@ http:Service mockService = service object {
     # + thread_id - The ID of the [thread](/docs/api-reference/threads) that was run.
     # + run_id - The ID of the run to modify.
     # + return - OK 
-    resource function post threads/[string thread_id]/runs/[string run_id](@http:Payload ModifyRunRequest payload) returns OkRunObject {
+    resource function post threads/[string thread_id]/runs/[string run_id](@http:Header string openai\-beta, @http:Payload ModifyRunRequest payload) returns OkRunObject {
         RunObject run = {
             "id": "run_c73jgpUPMts5wIsC2jOwqYyk",
             "object": "thread.run",
@@ -931,7 +931,7 @@ http:Service mockService = service object {
     # Create a thread and run it in one request.
     #
     # + return - OK 
-    resource function post threads/runs(@http:Payload CreateThreadAndRunRequest payload) returns OkRunObject {
+    resource function post threads/runs(@http:Header string openai\-beta, @http:Payload CreateThreadAndRunRequest payload) returns OkRunObject {
         RunObject run = {
             "id": "run_c73jgpUPMts5wIsC2jOwqYyk",
             "object": "thread.run",

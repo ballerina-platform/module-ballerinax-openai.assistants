@@ -53,8 +53,8 @@ final assistants:Client openAIAssistant = check new ({
 Calls to the Assistants API require that you pass a beta HTTP header. In Ballerina, you can define the header as follows:
 
 ```ballerina
-final map<string|string[]> headers = {
-    "OpenAI-Beta": ["assistants=v2"]
+const record {string OpenAI\-Beta;} headers = {
+    OpenAI\-Beta: "assistants=v2"
 };
 ```
 
@@ -81,7 +81,7 @@ public function main() returns error? {
     };
 
     // call the `post assistants` resource to create an Assistant
-    assistants:AssistantObject assistantResponse = check openAIAssistant->/assistants.post(request, headers);
+    assistants:AssistantObject assistant = check openaiAssistant->/assistants.post(headers,request);
 }
 ```
 

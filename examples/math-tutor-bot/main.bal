@@ -21,8 +21,9 @@ import ballerinax/openai.assistants;
 // Define configuration and client setup
 configurable string token = ?;
 
-final map<string|string[]> headers = {
-    "OpenAI-Beta": ["assistants=v2"]
+// define headers
+const record {string OpenAI\-Beta;} headers = {
+    OpenAI\-Beta: "assistants=v2"
 };
 
 public function main() returns error? {
@@ -45,7 +46,7 @@ public function main() returns error? {
         tools: [codeTool]
     };
 
-    assistants:AssistantObject assistant = check openaiAssistant->/assistants.post(request, headers);
+    assistants:AssistantObject assistant = check openaiAssistant->/assistants.post(headers, request);
     io:println("Assistant ID: ", assistant.id);
 
     // Step 2: Create a new conversation thread
@@ -53,7 +54,7 @@ public function main() returns error? {
         messages: []
     };
 
-    assistants:ThreadObject thread = check openaiAssistant->/threads.post(threadRequest, headers);
+    assistants:ThreadObject thread = check openaiAssistant->/threads.post(headers, threadRequest);
     io:println("Thread ID: ", thread.id);
 
     // Step 3: Create a message from the user asking for help with a math problem
@@ -62,7 +63,7 @@ public function main() returns error? {
         content: "Can you help me solve this equation: 2x + 3 = 7?"
     };
 
-    assistants:MessageObject message = check openaiAssistant->/threads/[thread.id]/messages.post(createMsgReq, headers);
+    assistants:MessageObject message = check openaiAssistant->/threads/[thread.id]/messages.post(headers, createMsgReq);
     io:println("User's Message ID: ", message.id);
 
     // Step 4: Start a run with the math assistant to respond to the query
@@ -75,7 +76,7 @@ public function main() returns error? {
         max_completion_tokens: 200
     };
 
-    assistants:RunObject run = check openaiAssistant->/threads/[thread.id]/runs.post(runReq, headers);
+    assistants:RunObject run = check openaiAssistant->/threads/[thread.id]/runs.post(headers, runReq);
     io:println("Run ID: ", run.id);
 
     // Step 5: Wait for a while to allow the assistant to process the request

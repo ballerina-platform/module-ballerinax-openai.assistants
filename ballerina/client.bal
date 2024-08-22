@@ -60,9 +60,10 @@ public isolated client class Client {
     # + assistant_id - The ID of the assistant to delete.
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function delete assistants/[string assistant_id](map<string|string[]> headers = {}) returns DeleteAssistantResponse|error {
+    resource isolated function delete assistants/[string assistant_id](DeleteAssistantHeaders headers) returns DeleteAssistantResponse|error {
         string resourcePath = string `/assistants/${getEncodedUri(assistant_id)}`;
-        return self.clientEp->delete(resourcePath, headers = headers);
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
+        return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
     # Delete a thread.
@@ -70,9 +71,10 @@ public isolated client class Client {
     # + thread_id - The ID of the thread to delete.
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function delete threads/[string thread_id](map<string|string[]> headers = {}) returns DeleteThreadResponse|error {
+    resource isolated function delete threads/[string thread_id](DeleteThreadHeaders headers) returns DeleteThreadResponse|error {
         string resourcePath = string `/threads/${getEncodedUri(thread_id)}`;
-        return self.clientEp->delete(resourcePath, headers = headers);
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
+        return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
     # Deletes a message.
@@ -81,9 +83,10 @@ public isolated client class Client {
     # + message_id - The ID of the message to delete.
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function delete threads/[string thread_id]/messages/[string message_id](map<string|string[]> headers = {}) returns DeleteMessageResponse|error {
+    resource isolated function delete threads/[string thread_id]/messages/[string message_id](DeleteMessageHeaders headers) returns DeleteMessageResponse|error {
         string resourcePath = string `/threads/${getEncodedUri(thread_id)}/messages/${getEncodedUri(message_id)}`;
-        return self.clientEp->delete(resourcePath, headers = headers);
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
+        return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
     # Returns a list of assistants.
@@ -91,10 +94,11 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - OK 
-    resource isolated function get assistants(map<string|string[]> headers = {}, *ListAssistantsQueries queries) returns ListAssistantsResponse|error {
+    resource isolated function get assistants(ListAssistantsHeaders headers, *ListAssistantsQueries queries) returns ListAssistantsResponse|error {
         string resourcePath = string `/assistants`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
+        return self.clientEp->get(resourcePath, httpHeaders);
     }
 
     # Retrieves an assistant.
@@ -102,9 +106,10 @@ public isolated client class Client {
     # + assistant_id - The ID of the assistant to retrieve.
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function get assistants/[string assistant_id](map<string|string[]> headers = {}) returns AssistantObject|error {
+    resource isolated function get assistants/[string assistant_id](GetAssistantHeaders headers) returns AssistantObject|error {
         string resourcePath = string `/assistants/${getEncodedUri(assistant_id)}`;
-        return self.clientEp->get(resourcePath, headers);
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
+        return self.clientEp->get(resourcePath, httpHeaders);
     }
 
     # Retrieves a thread.
@@ -112,9 +117,10 @@ public isolated client class Client {
     # + thread_id - The ID of the thread to retrieve.
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function get threads/[string thread_id](map<string|string[]> headers = {}) returns ThreadObject|error {
+    resource isolated function get threads/[string thread_id](GetThreadHeaders headers) returns ThreadObject|error {
         string resourcePath = string `/threads/${getEncodedUri(thread_id)}`;
-        return self.clientEp->get(resourcePath, headers);
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
+        return self.clientEp->get(resourcePath, httpHeaders);
     }
 
     # Returns a list of messages for a given thread.
@@ -123,10 +129,11 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - OK 
-    resource isolated function get threads/[string thread_id]/messages(map<string|string[]> headers = {}, *ListMessagesQueries queries) returns ListMessagesResponse|error {
+    resource isolated function get threads/[string thread_id]/messages(ListMessagesHeaders headers, *ListMessagesQueries queries) returns ListMessagesResponse|error {
         string resourcePath = string `/threads/${getEncodedUri(thread_id)}/messages`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
+        return self.clientEp->get(resourcePath, httpHeaders);
     }
 
     # Retrieve a message.
@@ -135,9 +142,10 @@ public isolated client class Client {
     # + message_id - The ID of the message to retrieve.
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function get threads/[string thread_id]/messages/[string message_id](map<string|string[]> headers = {}) returns MessageObject|error {
+    resource isolated function get threads/[string thread_id]/messages/[string message_id](GetMessageHeaders headers) returns MessageObject|error {
         string resourcePath = string `/threads/${getEncodedUri(thread_id)}/messages/${getEncodedUri(message_id)}`;
-        return self.clientEp->get(resourcePath, headers);
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
+        return self.clientEp->get(resourcePath, httpHeaders);
     }
 
     # Returns a list of runs belonging to a thread.
@@ -146,10 +154,11 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - OK 
-    resource isolated function get threads/[string thread_id]/runs(map<string|string[]> headers = {}, *ListRunsQueries queries) returns ListRunsResponse|error {
+    resource isolated function get threads/[string thread_id]/runs(ListRunsHeaders headers, *ListRunsQueries queries) returns ListRunsResponse|error {
         string resourcePath = string `/threads/${getEncodedUri(thread_id)}/runs`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
+        return self.clientEp->get(resourcePath, httpHeaders);
     }
 
     # Retrieves a run.
@@ -158,9 +167,10 @@ public isolated client class Client {
     # + run_id - The ID of the run to retrieve.
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function get threads/[string thread_id]/runs/[string run_id](map<string|string[]> headers = {}) returns RunObject|error {
+    resource isolated function get threads/[string thread_id]/runs/[string run_id](GetRunHeaders headers) returns RunObject|error {
         string resourcePath = string `/threads/${getEncodedUri(thread_id)}/runs/${getEncodedUri(run_id)}`;
-        return self.clientEp->get(resourcePath, headers);
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
+        return self.clientEp->get(resourcePath, httpHeaders);
     }
 
     # Returns a list of run steps belonging to a run.
@@ -170,10 +180,11 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - OK 
-    resource isolated function get threads/[string thread_id]/runs/[string run_id]/steps(map<string|string[]> headers = {}, *ListRunStepsQueries queries) returns ListRunStepsResponse|error {
+    resource isolated function get threads/[string thread_id]/runs/[string run_id]/steps(ListRunStepsHeaders headers, *ListRunStepsQueries queries) returns ListRunStepsResponse|error {
         string resourcePath = string `/threads/${getEncodedUri(thread_id)}/runs/${getEncodedUri(run_id)}/steps`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
+        return self.clientEp->get(resourcePath, httpHeaders);
     }
 
     # Retrieves a run step.
@@ -183,21 +194,23 @@ public isolated client class Client {
     # + step_id - The ID of the run step to retrieve.
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function get threads/[string thread_id]/runs/[string run_id]/steps/[string step_id](map<string|string[]> headers = {}) returns RunStepObject|error {
+    resource isolated function get threads/[string thread_id]/runs/[string run_id]/steps/[string step_id](GetRunStepHeaders headers) returns RunStepObject|error {
         string resourcePath = string `/threads/${getEncodedUri(thread_id)}/runs/${getEncodedUri(run_id)}/steps/${getEncodedUri(step_id)}`;
-        return self.clientEp->get(resourcePath, headers);
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
+        return self.clientEp->get(resourcePath, httpHeaders);
     }
 
     # Create an assistant with a model and instructions.
     #
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function post assistants(CreateAssistantRequest payload, map<string|string[]> headers = {}) returns AssistantObject|error {
+    resource isolated function post assistants(CreateAssistantHeaders headers, CreateAssistantRequest payload) returns AssistantObject|error {
         string resourcePath = string `/assistants`;
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        return self.clientEp->post(resourcePath, request, headers);
+        return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 
     # Modifies an assistant.
@@ -205,24 +218,26 @@ public isolated client class Client {
     # + assistant_id - The ID of the assistant to modify.
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function post assistants/[string assistant_id](ModifyAssistantRequest payload, map<string|string[]> headers = {}) returns AssistantObject|error {
+    resource isolated function post assistants/[string assistant_id](ModifyAssistantHeaders headers, ModifyAssistantRequest payload) returns AssistantObject|error {
         string resourcePath = string `/assistants/${getEncodedUri(assistant_id)}`;
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        return self.clientEp->post(resourcePath, request, headers);
+        return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 
     # Create a thread.
     #
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function post threads(CreateThreadRequest payload, map<string|string[]> headers = {}) returns ThreadObject|error {
+    resource isolated function post threads(CreateThreadHeaders headers, CreateThreadRequest payload) returns ThreadObject|error {
         string resourcePath = string `/threads`;
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        return self.clientEp->post(resourcePath, request, headers);
+        return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 
     # Modifies a thread.
@@ -230,12 +245,13 @@ public isolated client class Client {
     # + thread_id - The ID of the thread to modify. Only the `metadata` can be modified.
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function post threads/[string thread_id](ModifyThreadRequest payload, map<string|string[]> headers = {}) returns ThreadObject|error {
+    resource isolated function post threads/[string thread_id](ModifyThreadHeaders headers, ModifyThreadRequest payload) returns ThreadObject|error {
         string resourcePath = string `/threads/${getEncodedUri(thread_id)}`;
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        return self.clientEp->post(resourcePath, request, headers);
+        return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 
     # Create a message.
@@ -243,12 +259,13 @@ public isolated client class Client {
     # + thread_id - The ID of the [thread](/docs/api-reference/threads) to create a message for.
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function post threads/[string thread_id]/messages(CreateMessageRequest payload, map<string|string[]> headers = {}) returns MessageObject|error {
+    resource isolated function post threads/[string thread_id]/messages(CreateMessageHeaders headers, CreateMessageRequest payload) returns MessageObject|error {
         string resourcePath = string `/threads/${getEncodedUri(thread_id)}/messages`;
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        return self.clientEp->post(resourcePath, request, headers);
+        return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 
     # Modifies a message.
@@ -257,12 +274,13 @@ public isolated client class Client {
     # + message_id - The ID of the message to modify.
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function post threads/[string thread_id]/messages/[string message_id](ModifyMessageRequest payload, map<string|string[]> headers = {}) returns MessageObject|error {
+    resource isolated function post threads/[string thread_id]/messages/[string message_id](ModifyMessageHeaders headers, ModifyMessageRequest payload) returns MessageObject|error {
         string resourcePath = string `/threads/${getEncodedUri(thread_id)}/messages/${getEncodedUri(message_id)}`;
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        return self.clientEp->post(resourcePath, request, headers);
+        return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 
     # Create a run.
@@ -270,12 +288,13 @@ public isolated client class Client {
     # + thread_id - The ID of the thread to run.
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function post threads/[string thread_id]/runs(CreateRunRequest payload, map<string|string[]> headers = {}) returns RunObject|error {
+    resource isolated function post threads/[string thread_id]/runs(CreateRunHeaders headers, CreateRunRequest payload) returns RunObject|error {
         string resourcePath = string `/threads/${getEncodedUri(thread_id)}/runs`;
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        return self.clientEp->post(resourcePath, request, headers);
+        return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 
     # Modifies a run.
@@ -284,12 +303,13 @@ public isolated client class Client {
     # + run_id - The ID of the run to modify.
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function post threads/[string thread_id]/runs/[string run_id](ModifyRunRequest payload, map<string|string[]> headers = {}) returns RunObject|error {
+    resource isolated function post threads/[string thread_id]/runs/[string run_id](ModifyRunHeaders headers, ModifyRunRequest payload) returns RunObject|error {
         string resourcePath = string `/threads/${getEncodedUri(thread_id)}/runs/${getEncodedUri(run_id)}`;
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        return self.clientEp->post(resourcePath, request, headers);
+        return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 
     # Cancels a run that is `in_progress`.
@@ -298,10 +318,11 @@ public isolated client class Client {
     # + run_id - The ID of the run to cancel.
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function post threads/[string thread_id]/runs/[string run_id]/cancel(map<string|string[]> headers = {}) returns RunObject|error {
+    resource isolated function post threads/[string thread_id]/runs/[string run_id]/cancel(CancelRunHeaders headers) returns RunObject|error {
         string resourcePath = string `/threads/${getEncodedUri(thread_id)}/runs/${getEncodedUri(run_id)}/cancel`;
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
         http:Request request = new;
-        return self.clientEp->post(resourcePath, request, headers);
+        return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 
     # When a run has the `status: "requires_action"` and `required_action.type` is `submit_tool_outputs`, this endpoint can be used to submit the outputs from the tool calls once they're all completed. All outputs must be submitted in a single request.
@@ -310,23 +331,25 @@ public isolated client class Client {
     # + run_id - The ID of the run that requires the tool output submission.
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function post threads/[string thread_id]/runs/[string run_id]/submit_tool_outputs(SubmitToolOutputsRunRequest payload, map<string|string[]> headers = {}) returns RunObject|error {
+    resource isolated function post threads/[string thread_id]/runs/[string run_id]/submit_tool_outputs(SubmitToolOuputsToRunHeaders headers, SubmitToolOutputsRunRequest payload) returns RunObject|error {
         string resourcePath = string `/threads/${getEncodedUri(thread_id)}/runs/${getEncodedUri(run_id)}/submit_tool_outputs`;
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        return self.clientEp->post(resourcePath, request, headers);
+        return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 
     # Create a thread and run it in one request.
     #
     # + headers - Headers to be sent with the request 
     # + return - OK 
-    resource isolated function post threads/runs(CreateThreadAndRunRequest payload, map<string|string[]> headers = {}) returns RunObject|error {
+    resource isolated function post threads/runs(CreateThreadAndRunHeaders headers, CreateThreadAndRunRequest payload) returns RunObject|error {
         string resourcePath = string `/threads/runs`;
+        map<string|string[]> httpHeaders = getMapForHeaders(headers);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        return self.clientEp->post(resourcePath, request, headers);
+        return self.clientEp->post(resourcePath, request, httpHeaders);
     }
 }

@@ -62,8 +62,8 @@ final assistants:Client openAIAssistant = check new ({
 Calls to the Assistants API require that you pass a beta HTTP header. In Ballerina, you can define the header as follows:
 
 ```ballerina
-final map<string|string[]> headers = {
-    "OpenAI-Beta": ["assistants=v2"]
+assistants:CreateAssistantHeaders createAssistantHeaders = {
+    OpenAI\-Beta: "assistants=v2"
 };
 ```
 

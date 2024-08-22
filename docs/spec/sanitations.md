@@ -97,6 +97,32 @@ This document records the sanitation done on top of the official OpenAPI specifi
 
    - **Reason**: This change is necessary to prevent binding errors that occur when there are no messages in the thread, as `first_id` and `last_id` need to be nullable in such cases.
 
+7. **Added `OpenAI-Beta` version header to all path schemas with the `assistant` tag**:
+
+   - **Added Component**: 
+     ```yaml
+     parameters:
+        OpenAI-Beta-Header:
+            name: OpenAI-Beta
+            in: header
+            required: true
+            schema:
+                type: string
+            example: "assistants=v2"
+     ```
+
+   - **Added Parameter**:
+     - `parameters`:
+         - `$ref: '#/components/parameters/OpenAI-Beta-Header'`
+
+   - **Affected Schemas**: All path schemas with the tag `assistant`
+
+   - **Reason**: Since the Assistant API is in a beta version, it is necessary to send the version header with requests to ensure proper versioning and functionality.
+
+---
+
+This record provides a clear description of the changes made to include the version header, the affected schemas, and the reason for the modification.
+
 ---
 
 ## OpenAPI cli command

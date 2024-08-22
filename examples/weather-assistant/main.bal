@@ -85,8 +85,9 @@ public function main() returns error? {
     };
 
     assistants:CreateAssistantHeaders createAssistantHeaders = {
-        OpenAI-Beta: "assistants=v2"
+        OpenAI\-Beta: "assistants=v2"
     };
+    
 
     // Create the assistant
     assistants:AssistantObject response = check openaiAssistant->/assistants.post(createAssistantHeaders,assistantRequest);
@@ -98,7 +99,7 @@ public function main() returns error? {
     assistants:CreateThreadRequest request = {};
 
     assistants:CreateThreadHeaders createThreadHeaders = {
-        OpenAI-Beta: "assistants=v2"
+        OpenAI\-Beta: "assistants=v2"
     };
 
     assistants:ThreadObject threadResponse = check openaiAssistant->/threads.post(createThreadHeaders, request);
@@ -112,7 +113,7 @@ public function main() returns error? {
     };
 
     assistants:CreateMessageHeaders createMessageHeaders = {
-        OpenAI-Beta: "assistants=v2"
+        OpenAI\-Beta: "assistants=v2"
     };
 
     assistants:MessageObject messageResponse = check openaiAssistant->/threads/[threadId]/messages.post(createMessageHeaders, messageRequest);
@@ -130,14 +131,18 @@ public function main() returns error? {
     };
 
     assistants:CreateRunHeaders createRunHeaders = {
-        OpenAI-Beta: "assistants=v2"
+        OpenAI\-Beta: "assistants=v2"
     };
 
     assistants:RunObject runResponse = check openaiAssistant->/threads/[threadId]/runs.post(createRunHeaders, runRequest);
     string runId = runResponse.id;
 
+    assistants:GetRunHeaders getRunHeaders = {
+        OpenAI\-Beta: "assistants=v2"
+    };
+
     check waitUntilRunCompletes(openaiAssistant, threadId, runId, 60);
-    runResponse = check openaiAssistant->/threads/[threadId]/runs/[runId].get(headers);
+    runResponse = check openaiAssistant->/threads/[threadId]/runs/[runId].get(getRunHeaders);
     // Step 4: Submit required tool outputs
     if runResponse.status == "requires_action" && runResponse.required_action is assistants:RunObject_required_action {
         assistants:SubmitToolOutputsRunRequest_tool_outputs[] toolOutputs = [];
@@ -173,8 +178,12 @@ public function main() returns error? {
         assistants:SubmitToolOutputsRunRequest submissionRequest = {
             tool_outputs: toolOutputs
         };
+
+        assistants:SubmitToolOuputsToRunHeaders submitToolOutputsHeaders = {
+            OpenAI\-Beta: "assistants=v2"
+        };
         // Submit tool outputs
-        assistants:RunObject submissionResponse = check openaiAssistant->/threads/[threadId]/runs/[runId]/submit_tool_outputs.post(submissionRequest, headers);
+        assistants:RunObject submissionResponse = check openaiAssistant->/threads/[threadId]/runs/[runId]/submit_tool_outputs.post(submitToolOutputsHeaders, submissionRequest);
 
         io:println("Tool outputs submitted successfully.");
         check waitUntilRunCompletes(openaiAssistant, threadId, runId, 60);
@@ -184,7 +193,10 @@ public function main() returns error? {
     }
 
     // Step 5: Retrieve and display the response from the assistant
-    assistants:ListMessagesResponse messages = check openaiAssistant->/threads/[threadId]/messages.get(headers);
+    assistants:ListMessagesHeaders listMessageHeaders = {
+        OpenAI\-Beta: "assistants=v2"
+    };
+    assistants:ListMessagesResponse messages = check openaiAssistant->/threads/[threadId]/messages.get(listMessageHeaders);
 
     if messages.data.length() > 0 {
         // Find the assistant's response in the thread
@@ -210,10 +222,16 @@ public function main() returns error? {
     }
 
     // Step 6: Clean up by deleting the assistant and thread
-    assistants:DeleteAssistantResponse delAssistant = check openaiAssistant->/assistants/[assistantId].delete(headers);
+    assistants:DeleteAssistantHeaders deleteAssistantHeaders = {
+        OpenAI\-Beta: "assistants=v2"
+    };
+    assistants:DeleteAssistantResponse delAssistant = check openaiAssistant->/assistants/[assistantId].delete(deleteAssistantHeaders);
     io:println("Deleted Assistant: ", delAssistant.deleted);
 
-    assistants:DeleteThreadResponse delThread = check openaiAssistant->/threads/[threadId].delete(headers);
+    assistants:DeleteThreadHeaders deleteThreadHeaders = {
+        OpenAI\-Beta: "assistants=v2"
+    };
+    assistants:DeleteThreadResponse delThread = check openaiAssistant->/threads/[threadId].delete(deleteThreadHeaders);
     io:println("Deleted Thread: ", delThread.deleted);
 }
 
@@ -239,6 +257,10 @@ public function waitUntilRunCompletes(assistants:Client openaiAssistant, string 
 
     while (waitedTime < maxWaitTimeSeconds) {
         // Get the current status of the run
+        assistants:GetRunHeaders headers = {
+            OpenAI\-Beta: "assistants=v2"
+        };
+        
         assistants:RunObject run = check openaiAssistant->/threads/[threadId]/runs/[runId].get(headers);
         io:println("Current run status: ", run.status);
 

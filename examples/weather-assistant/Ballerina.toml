@@ -1,6 +1,6 @@
 [package]
 org = "sanduni"
-name = "Weather_assistant"
+name = "weather_assistant"
 version = "0.1.0"
 distribution = "2201.9.3"
 

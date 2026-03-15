@@ -1,8 +1,16 @@
 ## Overview
 
-[OpenAI](https://openai.com/), an AI research organization focused on creating friendly AI for humanity, offers the [OpenAI API](https://platform.openai.com/docs/api-reference/introduction) to access its powerful AI models for tasks like natural language processing and image generation.
+[OpenAI](https://openai.com/) offers powerful AI models for tasks like natural language processing and image generation.
 
-The `ballarinax/openai.assistants` connector allows developers to seamlessly integrate OpenAI's advanced language models into their applications by interacting with [OpenAI REST API v1](https://platform.openai.com/docs/api-reference/assistants). This connector provides tools to build powerful [OpenAI Assistants](https://platform.openai.com/docs/assistants/overview) capable of performing a wide range of tasks, such as generating human-like text, managing conversations with persistent threads, and utilizing multiple tools in parallel. OpenAI has recently announced a variety of new features and improvements to the Assistants API, moving their Beta to a [new API version](https://platform.openai.com/docs/assistants/whats-new), `OpenAI-Beta: assistants=v2`. The users can interact with both the API v1 and v2 by [passing the respective API version header with the request.](https://platform.openai.com/docs/assistants/migration/changing-beta-versions)  
+The OpenAI Assistants connector allows developers to integrate OpenAI's advanced language models into their applications by interacting with the [OpenAI Assistants API](https://platform.openai.com/docs/api-reference/assistants). This connector provides tools to build powerful assistants capable of generating human-like text, managing conversations with persistent threads, and utilizing multiple tools in parallel.
+
+### Key Features
+
+- Support for OpenAI Assistants API v1 and v2
+- Seamless integration with advanced language models (e.g., GPT-4o, GPT-3.5)
+- Management of persistent conversation threads
+- Support for various tools like Code Interpreter and Function Calling
+- Simplified handling of model parameters and headers
 
 ## Setup guide
 

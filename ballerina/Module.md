@@ -5,6 +5,14 @@
 The `ballarinax/openai.assistants` connector allows developers to seamlessly integrate OpenAI's advanced language models into their applications by interacting with [OpenAI REST API v1](https://platform.openai.com/docs/api-reference/assistants). This connector provides tools to build powerful [OpenAI Assistants](https://platform.openai.com/docs/assistants/overview) capable of performing a wide range of tasks, such as generating human-like text, managing conversations with persistent threads, and utilizing multiple tools in parallel. OpenAI has recently announced a variety of new features and improvements to the Assistants API, moving their Beta to a [new API version](https://platform.openai.com/docs/assistants/whats-new), `OpenAI-Beta: assistants=v2`. The users can interact with both the API v1 and v2 by [passing the respective API version header with the request.](https://platform.openai.com/docs/assistants/migration/changing-beta-versions)
 
 
+
+### Key Features
+
+- Create and manage AI assistants with custom instructions
+- Handle conversation threads and messages
+- Support for file attachments and code interpreter
+- Run assistants with tool calling capabilities
+
 ## Setup guide
 
 To use the OpenAI Connector, you must have access to the OpenAI API through a [OpenAI Platform account](https://platform.openai.com) and a project under it. If you do not have a OpenAI Platform account, you can sign up for one [here](https://platform.openai.com/signup).
